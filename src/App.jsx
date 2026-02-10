@@ -4,6 +4,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import MoviePage from './pages/MoviePage'
 import Footer from './components/Footer'
+
 function App() {
   return (
     <div className="flex flex-col h-full  justify-between">
