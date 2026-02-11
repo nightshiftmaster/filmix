@@ -1,5 +1,20 @@
-export const FETCH_POPULAR = 'movies/FETCH_POPULAR'
-export const fetchPopular = (page = 1) => ({
-  type: FETCH_POPULAR,
+export const fetchMovies = (page = 1, filterId = 'popular') => ({
+  type: 'FETCH_MOVIES_PENDING',
   payload: page,
+  filterId,
+})
+
+export const fetchMovieDetails = (movieId) => ({
+  type: 'FETCH_MOVIE_DETAILS',
+  payload: movieId,
+})
+
+export const addFavorite = (movie) => ({
+  type: 'ADD_FAVORITE',
+  payload: movie,
+})
+
+export const removeFavorite = (movieId) => ({
+  type: 'REMOVE_FAVORITE',
+  payload: movieId,
 })

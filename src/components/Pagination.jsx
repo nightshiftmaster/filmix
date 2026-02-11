@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 export default function Pagination({ setCurrentPage, pagesCount }) {
   const [currentIndex, setCurrentIndex] = useState(1)
   return (

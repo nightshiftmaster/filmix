@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function MovieCard({ movie }) {
   return (
-    <div
-      key={movie.id}
-      className="shrink-0 w-40 rounded-xl overflow-hidden bg-neutral-800"
+    <Link
+      to={`/movie/${movie.id}`}
+      className="shrink-0 w-40 rounded-xl overflow-hidden bg-neutral-800 block"
     >
       {movie.poster_path ? (
         <img
@@ -23,6 +24,6 @@ export default function MovieCard({ movie }) {
       >
         {movie.title}
       </p>
-    </div>
+    </Link>
   )
 }

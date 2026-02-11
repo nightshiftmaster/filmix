@@ -7,10 +7,10 @@ import Footer from './components/Footer'
 
 function App() {
   return (
-    <div className="flex flex-col h-full  justify-between">
+    <div className="flex flex-col h-full   justify-between">
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<MoviePage />} />
+        <Route path="/movie/:id" element={<MoviePage />} />
       </Routes>
       <Footer />
     </div>

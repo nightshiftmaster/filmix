@@ -1,11 +1,52 @@
-const init = { popular: null, loading: false, error: null }
+import { createSlice } from '@reduxjs/toolkit'
 
-export default function moviesReducer(state = init, { type, payload }) {
-  if (type === 'movies/FETCH_POPULAR')
-    return { ...state, loading: true, error: null }
-  if (type === 'movies/FETCH_POPULAR_OK')
-    return { ...state, popular: payload, loading: false }
-  if (type === 'movies/FETCH_POPULAR_FAIL')
-    return { ...state, error: payload, loading: false }
-  return state
+const initialState = {
+  list: { data: null, loading: false, error: null },
+  details: { data: null, loading: false, error: null },
+  favorites: [],
 }
+
+const moviesSlice = createSlice({
+  name: 'movies',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase('FETCH_MOVIES_PENDING', (state) => {
+        state.list.loading = true
+        state.list.error = null
+      })
+      .addCase('FETCH_MOVIES_OK', (state, { payload }) => {
+        state.list.data = payload
+        state.list.loading = false
+        state.list.error = null
+      })
+      .addCase('FETCH_MOVIES_ERROR', (state, { payload }) => {
+        state.list.loading = false
+        state.list.error = payload
+      })
+      .addCase('FETCH_MOVIE_DETAILS', (state) => {
+        state.details.loading = true
+        state.details.error = null
+      })
+      .addCase('FETCH_MOVIE_DETAILS_OK', (state, { payload }) => {
+        state.details.data = payload
+        state.details.loading = false
+        state.details.error = null
+      })
+      .addCase('FETCH_MOVIE_DETAILS_ERROR', (state, { payload }) => {
+        state.details.loading = false
+        state.details.error = payload
+      })
+      .addCase('ADD_FAVORITE', (state, { payload }) => {
+        if (!state.favorites.some((f) => f.id === payload.id)) {
+          state.favorites.push(payload)
+        }
+      })
+      .addCase('REMOVE_FAVORITE', (state, { payload }) => {
+        state.favorites = state.favorites.filter((f) => f.id !== payload)
+      })
+  },
+})
+
+export default moviesSlice.reducer
