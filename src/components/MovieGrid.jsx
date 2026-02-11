@@ -1,51 +1,59 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { IoHeartOutline } from 'react-icons/io5'
-import { fetchMovies } from '../store/movies/actions'
-import { selectListState } from '../store/movies/selectors'
-import { handleMoviesKeyboardNavigation } from '../utils/keyboard'
-import MovieCard from './MovieCard'
-import Skeleton from './Skeleton'
-import Pagination from './Pagination'
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { IoHeartOutline } from "react-icons/io5";
+import { fetchMovies } from "../store/movies/actions";
+import { selectListState } from "../store/movies/selectors";
+import { handleGridKeyDown } from "../utils/keyboard";
+import MovieCard from "./MovieCard";
+import Skeleton from "./Skeleton";
+import Pagination from "./Pagination";
 
 export default function MovieGrid({
-  category = 'Popular',
-  filterId = 'popular',
+  category = "Popular",
+  filterId = "popular",
 }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { movies, loading, error, totalPages } = useSelector((state) =>
-    selectListState(state, filterId)
-  )
-  const [currentPage, setCurrentPage] = useState(1)
-  const isFavorites = filterId === 'favorites'
+    selectListState(state, filterId),
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const isFavorites = filterId === "favorites";
 
   useEffect(() => {
     if (!isFavorites) {
-      dispatch(fetchMovies(currentPage, filterId))
+      dispatch(fetchMovies(currentPage, filterId));
     }
-  }, [dispatch, currentPage, filterId, isFavorites])
+  }, [dispatch, currentPage, filterId, isFavorites]);
 
-  if (error) return <p className="text-red-400 p-4">Error: {error}</p>
+  if (error) return <p className="text-red-400 p-4">Error: {error}</p>;
 
-  const skeletonCount = 15
+  const skeletonCount = 15;
 
   return (
-    <div className="w-full flex flex-col gap-10 md:px-20 px-2-mt-7  mb-30 ">
+    <div className="w-full flex flex-col gap-10 md:px-20 px-4 mb-30">
       <div className="p-10 ">
         <h2 className="md:text-4xl  text-2xl md:text-left text-center font-bold text-white mb-4">
           {category}
         </h2>
         <div
-          className="flex gap-5 justify-start md:flex-wrap overflow-y-auto pb-2 pt-4 px-3"
-          onKeyDown={handleMoviesKeyboardNavigation}
+          className="flex flex-wrap gap-1 overflow-x-auto md:overflow-x-hidden overflow-y-auto max-h-[70vh] md:overflow-y-visible md:max-h-none pb-2 pt-4 pl-4 pr-2"
+          onKeyDown={handleGridKeyDown}
         >
           {loading
             ? Array.from({ length: skeletonCount }).map((_, i) => (
-                <Skeleton key={i} />
+                <div
+                  key={i}
+                  className="shrink-0 w-[calc((100%-3*0.25rem)/4)] p-1 -m-1"
+                >
+                  <Skeleton />
+                </div>
               ))
             : movies?.length > 0
               ? movies.map((movie) => (
-                  <div key={movie.id} className="p-3 -m-3">
+                  <div
+                    key={movie.id}
+                    className="shrink-0 md:w-[calc((100%-3*0.25rem)/4)] w-[calc((100%-3*0.25rem)/1.6)]  "
+                  >
                     <MovieCard movie={movie} />
                   </div>
                 ))
@@ -61,10 +69,10 @@ export default function MovieGrid({
                   </div>
                 )}
         </div>
+        {!loading && !isFavorites && (
+          <Pagination setCurrentPage={setCurrentPage} pagesCount={totalPages} />
+        )}
       </div>
-      {!loading && !isFavorites && (
-        <Pagination setCurrentPage={setCurrentPage} pagesCount={totalPages} />
-      )}
     </div>
-  )
+  );
 }

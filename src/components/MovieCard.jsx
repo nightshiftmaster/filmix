@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default function MovieCard({ movie }) {
   return (
@@ -7,7 +7,7 @@ export default function MovieCard({ movie }) {
       to={`/movie/${movie.id}`}
       data-movie-card
       onMouseEnter={(e) => e.currentTarget.focus()}
-      className="shrink-0 w-40 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-black rounded-xl overflow-hidden bg-neutral-800 block hover:scale-105 focus:scale-105 transition-transform duration-300 origin-center"
+      className="shrink-0 w-[calc((100%-3*0.25rem)/1.1)]  mb-20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-black rounded-xl overflow-hidden bg-neutral-800 block hover:scale-105 focus:scale-105 transition-transform duration-300 origin-center"
     >
       {movie.poster_path ? (
         <img
@@ -27,5 +27,5 @@ export default function MovieCard({ movie }) {
         {movie.title}
       </p>
     </Link>
-  )
+  );
 }
