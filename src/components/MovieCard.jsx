@@ -5,7 +5,9 @@ export default function MovieCard({ movie }) {
   return (
     <Link
       to={`/movie/${movie.id}`}
-      className="shrink-0 w-40 rounded-xl overflow-hidden bg-neutral-800 block"
+      data-movie-card
+      onMouseEnter={(e) => e.currentTarget.focus()}
+      className="shrink-0 w-40 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-black rounded-xl overflow-hidden bg-neutral-800 block hover:scale-105 focus:scale-105 transition-transform duration-300 origin-center"
     >
       {movie.poster_path ? (
         <img

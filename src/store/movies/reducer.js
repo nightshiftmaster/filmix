@@ -1,9 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const FAVORITES_STORAGE_KEY = 'filmix_favorites'
+
+function getFavoritesFromStorage() {
+  try {
+    const raw = localStorage.getItem(FAVORITES_STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
 const initialState = {
   list: { data: null, loading: false, error: null },
   details: { data: null, loading: false, error: null },
-  favorites: [],
+  favorites: getFavoritesFromStorage(),
 }
 
 const moviesSlice = createSlice({
@@ -49,4 +62,5 @@ const moviesSlice = createSlice({
   },
 })
 
+export { FAVORITES_STORAGE_KEY }
 export default moviesSlice.reducer

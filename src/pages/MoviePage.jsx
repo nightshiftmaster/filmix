@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   fetchMovieDetails,
@@ -11,6 +11,7 @@ import Skeleton from '../components/Skeleton'
 
 export default function MoviePage() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { data, loading, error } = useSelector(selectDetailsData)
   const isFavorite = useSelector((state) => selectIsFavorite(state, data?.id))
@@ -18,6 +19,14 @@ export default function MoviePage() {
   useEffect(() => {
     if (id) dispatch(fetchMovieDetails(Number(id)))
   }, [dispatch, id])
+
+  useEffect(() => {
+    const handleEscapeKey = (e) => {
+      if (e.key === 'Escape') navigate('/')
+    }
+    window.addEventListener('keydown', handleEscapeKey)
+    return () => window.removeEventListener('keydown', handleEscapeKey)
+  }, [navigate])
 
   if (error || (!loading && !data)) {
     return (

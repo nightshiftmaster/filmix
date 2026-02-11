@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IoHeartOutline } from 'react-icons/io5'
 import { fetchMovies } from '../store/movies/actions'
 import { selectListState } from '../store/movies/selectors'
+import { handleMoviesKeyboardNavigation } from '../utils/keyboard'
 import MovieCard from './MovieCard'
 import Skeleton from './Skeleton'
 import Pagination from './Pagination'
@@ -34,14 +35,19 @@ export default function MovieGrid({
         <h2 className="md:text-4xl  text-2xl md:text-left text-center font-bold text-white mb-4">
           {category}
         </h2>
-        <div className="flex gap-10 md:flex-wrap  overflow-y-auto pb-2">
+        <div
+          className="flex gap-5 justify-start md:flex-wrap overflow-y-auto pb-2 pt-4 px-3"
+          onKeyDown={handleMoviesKeyboardNavigation}
+        >
           {loading
             ? Array.from({ length: skeletonCount }).map((_, i) => (
                 <Skeleton key={i} />
               ))
             : movies?.length > 0
               ? movies.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
+                  <div key={movie.id} className="p-3 -m-3">
+                    <MovieCard movie={movie} />
+                  </div>
                 ))
               : isFavorites && (
                   <div className="flex flex-col items-center justify-center gap-4 w-full py-12">
