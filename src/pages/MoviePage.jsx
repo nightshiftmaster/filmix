@@ -7,6 +7,7 @@ import {
   removeFavorite,
 } from '../store/movies/actions'
 import { selectDetailsData, selectIsFavorite } from '../store/movies/selectors'
+import Skeleton from '../components/Skeleton'
 
 export default function MoviePage() {
   const { id } = useParams()
@@ -30,8 +31,7 @@ export default function MoviePage() {
   }
 
   const posterUrl =
-    data?.poster_path &&
-    `https://image.tmdb.org/t/p/w500${data.poster_path}`
+    data?.poster_path && `https://image.tmdb.org/t/p/w500${data.poster_path}`
   const backdropUrl =
     data?.backdrop_path &&
     `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`
@@ -43,11 +43,7 @@ export default function MoviePage() {
     } else {
       dispatch(
         addFavorite({
-          id: data.id,
-          title: data.title,
-          poster_path: data.poster_path,
-          overview: data.overview,
-          release_date: data.release_date,
+          ...data,
         })
       )
     }
@@ -66,19 +62,10 @@ export default function MoviePage() {
         </div>
       )}
       <div className="relative z-10 w-[80%] mx-auto px-4 py-8 flex flex-col justify-center min-h-screen">
-        <Link
-          to="/"
-          className="inline-block text-white hover:bg-white/10 mb-6 border w-fit mx-auto border-white/10 rounded-full px-4 py-2"
-        >
-          ← Back to home
-        </Link>
-
         <div className="flex flex-col md:flex-row gap-8">
           <div className="shrink-0 w-full md:w-[40%]">
             {loading ? (
-              <div className="w-full rounded-xl overflow-hidden bg-neutral-800 animate-pulse">
-                <div className="w-full aspect-2/3 bg-neutral-700" />
-              </div>
+              <Skeleton variant="poster" />
             ) : posterUrl ? (
               <img
                 src={posterUrl}
@@ -94,12 +81,7 @@ export default function MoviePage() {
 
           <div className="flex-1 gap-10 flex flex-col justify-center items-center">
             {loading ? (
-              <>
-                <div className="h-12 w-3/4 bg-neutral-800 rounded animate-pulse" />
-                <div className="h-5 w-1/2 bg-neutral-800 rounded animate-pulse" />
-                <div className="h-24 w-full max-w-[70%] bg-neutral-800 rounded animate-pulse" />
-                <div className="h-12 w-40 bg-neutral-700 rounded animate-pulse" />
-              </>
+              <Skeleton variant="detail" />
             ) : (
               <>
                 <h1 className="text-3xl md:text-6xl font-bold mb-2 text-center">
@@ -122,6 +104,12 @@ export default function MoviePage() {
                 >
                   {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
                 </button>
+                <Link
+                  to="/"
+                  className="inline-block text-white bg-white/10 hover:bg-white/20 mb-6 border w-fit mx-auto border-white/10 px-6 py-3 rounded-lg"
+                >
+                  ← Back to home
+                </Link>
               </>
             )}
           </div>

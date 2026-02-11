@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { IoHeartOutline } from 'react-icons/io5'
 import { fetchMovies } from '../store/movies/actions'
 import { selectListState } from '../store/movies/selectors'
 import MovieCard from './MovieCard'
-import MovieSkeleton from './MovieSkeleton'
+import Skeleton from './Skeleton'
 import Pagination from './Pagination'
 
 export default function MovieGrid({
@@ -11,12 +12,17 @@ export default function MovieGrid({
   filterId = 'popular',
 }) {
   const dispatch = useDispatch()
-  const { movies, loading, error, totalPages } = useSelector(selectListState)
+  const { movies, loading, error, totalPages } = useSelector((state) =>
+    selectListState(state, filterId)
+  )
   const [currentPage, setCurrentPage] = useState(1)
+  const isFavorites = filterId === 'favorites'
 
   useEffect(() => {
-    dispatch(fetchMovies(currentPage, filterId))
-  }, [dispatch, currentPage, filterId])
+    if (!isFavorites) {
+      dispatch(fetchMovies(currentPage, filterId))
+    }
+  }, [dispatch, currentPage, filterId, isFavorites])
 
   if (error) return <p className="text-red-400 p-4">Error: {error}</p>
 
@@ -31,14 +37,26 @@ export default function MovieGrid({
         <div className="flex gap-10 md:flex-wrap  overflow-y-auto pb-2">
           {loading
             ? Array.from({ length: skeletonCount }).map((_, i) => (
-                <MovieSkeleton key={i} />
+                <Skeleton key={i} />
               ))
-            : movies?.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
+            : movies?.length > 0
+              ? movies.map((movie) => (
+                  <MovieCard key={movie.id} movie={movie} />
+                ))
+              : isFavorites && (
+                  <div className="flex flex-col items-center justify-center gap-4 w-full py-12">
+                    <IoHeartOutline
+                      className="text-white/50 w-16 h-16"
+                      aria-hidden
+                    />
+                    <p className="text-white/70 text-lg text-center">
+                      No favorites yet. Add movies from their detail page.
+                    </p>
+                  </div>
+                )}
         </div>
       </div>
-      {!loading && (
+      {!loading && !isFavorites && (
         <Pagination setCurrentPage={setCurrentPage} pagesCount={totalPages} />
       )}
     </div>

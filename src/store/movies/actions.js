@@ -1,4 +1,4 @@
-export const fetchMovies = (page = 1, filterId = 'popular') => ({
+export const fetchMovies = (page = 1, filterId) => ({
   type: 'FETCH_MOVIES_PENDING',
   payload: page,
   filterId,

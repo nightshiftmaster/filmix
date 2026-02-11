@@ -1,16 +1,26 @@
 import { createSelector } from '@reduxjs/toolkit'
 
 const details = (s) => s.movies.details
-const favorites = (s) => s.movies.favorites
 
 export const selectListState = createSelector(
-  [(state) => state.movies.list],
-  (list) => ({
-    movies: list?.data?.movies ?? [],
-    loading: list.loading,
-    error: list.error,
-    totalPages: list?.data?.totalPages ?? 0,
-  })
+  [(state) => state.movies, (_, filterId) => filterId],
+  (moviesState, filterId) => {
+    if (filterId === 'favorites') {
+      return {
+        movies: moviesState.favorites ?? [],
+        loading: false,
+        error: null,
+        totalPages: 0,
+      }
+    }
+    const list = moviesState.list
+    return {
+      movies: list?.data?.movies ?? [],
+      loading: list.loading,
+      error: list.error,
+      totalPages: list?.data?.totalPages ?? 0,
+    }
+  }
 )
 
 export const selectDetailsData = createSelector([details], (detailsSlice) => ({
@@ -20,4 +30,4 @@ export const selectDetailsData = createSelector([details], (detailsSlice) => ({
 }))
 
 export const selectIsFavorite = (s, movieId) =>
-  favorites(s).some((f) => f.id === movieId)
+  s.movies.favorites.some((f) => f.id === movieId)
