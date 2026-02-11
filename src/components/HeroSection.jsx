@@ -3,7 +3,7 @@ import Search from './Search'
 
 export default function HeroSection() {
   return (
-    <div className="relative h-[60vh] w-full shrink-0 overflow-hidden">
+    <div className="relative z-10 h-[60vh] w-full shrink-0 overflow-visible">
       <div className="absolute inset-0 z-0">
         <img
           src="/hero-bg.webp"

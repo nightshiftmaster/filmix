@@ -16,7 +16,7 @@ export default function HomePage() {
   return (
     <div className="w-full min-h-full flex flex-col bg-black overflow-auto">
       <HeroSection />
-      <div className="w-full md:px-20 px-4 pt-6">
+      <div className="relative z-0 w-full md:px-20 px-4 pt-6">
         <FilterTabs activeTab={activeTab} onTabChange={setActiveTab} />
         <MovieGrid category={categoryLabel} filterId={activeTab} />
       </div>
