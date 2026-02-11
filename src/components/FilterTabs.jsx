@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { handleTabsKeyboardNavigation } from "../utils/keyboard";
 
 const TABS = [
@@ -9,6 +9,14 @@ const TABS = [
 
 export default function FilterTabs({ activeTab, onTabChange }) {
   const currentIndex = TABS.findIndex((tab) => tab.id === activeTab);
+  const timerRef = useRef(null);
+
+  const clear = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = null;
+  };
+
+  useEffect(() => () => clear(), []);
 
   return (
     <div className="flex justify-center items-center">
@@ -17,10 +25,22 @@ export default function FilterTabs({ activeTab, onTabChange }) {
           <button
             key={tab.id}
             type="button"
-            onClick={() => onTabChange(tab.id)}
-            onKeyDown={(e) =>
-              handleTabsKeyboardNavigation(e, onTabChange, currentIndex, TABS)
-            }
+            onClick={() => {
+              clear();
+              onTabChange(tab.id);
+            }}
+            onFocus={() => {
+              clear();
+              timerRef.current = setTimeout(() => {
+                timerRef.current = null;
+                onTabChange(tab.id);
+              }, 2000);
+            }}
+            onBlur={clear}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowLeft" || e.key === "ArrowRight") clear();
+              handleTabsKeyboardNavigation(e, onTabChange, currentIndex, TABS);
+            }}
             className={`
                  outline-none focus:outline-none focus-visible:outline-none
               md:px-6 px-2 md:py-3 py-2 font-medium rounded-t-lg border border-gray-600 text-xs md:text-base border-b-0
