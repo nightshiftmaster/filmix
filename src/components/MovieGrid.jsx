@@ -36,7 +36,7 @@ export default function MovieGrid({
           {category}
         </h2>
         <div
-          className="flex flex-wrap gap-1 overflow-x-auto md:overflow-x-hidden overflow-y-auto max-h-[70vh] md:overflow-y-visible md:max-h-none pb-2 pt-4 pl-4 pr-2"
+          className="flex flex-wrap gap-1 overflow-x-auto md:overflow-x-hidden overflow-y-auto max-h-[70vh] md:overflow-y-visible md:max-h-none pb-2 pt-5 pl-4 pr-2"
           onKeyDown={handleGridKeyDown}
         >
           {loading

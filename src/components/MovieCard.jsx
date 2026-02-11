@@ -7,6 +7,7 @@ export default function MovieCard({ movie }) {
       to={`/movie/${movie.id}`}
       data-movie-card
       onMouseEnter={(e) => e.currentTarget.focus()}
+      onMouseLeave={(e) => e.currentTarget.blur()}
       className="shrink-0 w-[calc((100%-3*0.25rem)/1.1)]  mb-20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-black rounded-xl overflow-hidden bg-neutral-800 block hover:scale-105 focus:scale-105 transition-transform duration-300 origin-center"
     >
       {movie.poster_path ? (
