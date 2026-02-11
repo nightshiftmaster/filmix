@@ -1,4 +1,4 @@
-export const handleKeyboardNavigation = (
+export const handleTabsKeyboardNavigation = (
   e,
   onTabChange,
   currentIndex,
@@ -21,16 +21,25 @@ export const handleKeyboardNavigation = (
 
 const ARROW_KEYS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
-export const handleGridKeyDown = (e) => {
+export const handleMoviesKeyboardNavigation = (e) => {
+  if (e.key === "Tab") e.preventDefault();
   if (!ARROW_KEYS.includes(e.key)) return;
-
   const grid = e.currentTarget;
   const cards = [...grid.querySelectorAll("[data-movie-card]")];
   const focusedCard = e.target.closest("[data-movie-card]");
   const currentIndex = cards.indexOf(focusedCard);
   if (currentIndex === -1) return;
 
-  const step = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : -1;
+  const step =
+    e.key === "ArrowRight"
+      ? 1
+      : e.key === "ArrowLeft"
+        ? -1
+        : e.key === "ArrowDown"
+          ? 4
+          : -4;
   const nextIndex = (currentIndex + step + cards.length) % cards.length;
   cards[nextIndex]?.focus();
 };
+
+export const handleGridKeyDown = handleMoviesKeyboardNavigation;

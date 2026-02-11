@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React from "react";
+import { handleTabsKeyboardNavigation } from "../utils/keyboard";
 
 const TABS = [
   { id: "popular", label: "Popular" },
@@ -7,41 +8,23 @@ const TABS = [
 ];
 
 export default function FilterTabs({ activeTab, onTabChange }) {
-  const tabRefs = useRef([]);
-
-  const handleKeyDown = (e, index) => {
-    let nextIndex = index;
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      nextIndex = index > 0 ? index - 1 : TABS.length - 1;
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      nextIndex = index < TABS.length - 1 ? index + 1 : 0;
-    } else return;
-    onTabChange(TABS[nextIndex].id);
-    tabRefs.current[nextIndex]?.focus();
-  };
+  const currentIndex = TABS.findIndex((tab) => tab.id === activeTab);
 
   return (
     <div className="flex justify-center items-center">
-      <div
-        role="tablist"
-        aria-label="Content filter"
-        className="flex gap-0 border-b border-gray-700 justify-center items-center w-[85%]"
-      >
-        {TABS.map((tab, index) => (
+      <div className="flex gap-0 border-b border-gray-700 justify-center items-center w-[85%]">
+        {TABS.map((tab) => (
           <button
             key={tab.id}
-            ref={(el) => (tabRefs.current[index] = el)}
-            role="tab"
-            aria-selected={activeTab === tab.id}
-            tabIndex={activeTab === tab.id ? 0 : -1}
             type="button"
             onClick={() => onTabChange(tab.id)}
-            onKeyDown={(e) => handleKeyDown(e, index)}
+            onKeyDown={(e) =>
+              handleTabsKeyboardNavigation(e, onTabChange, currentIndex, TABS)
+            }
             className={`
+                 outline-none focus:outline-none focus-visible:outline-none
               md:px-6 px-2 md:py-3 py-2 font-medium rounded-t-lg border border-gray-600 text-xs md:text-base border-b-0
-              transition-colors focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black
+              transition-colors
               ${
                 activeTab === tab.id
                   ? "bg-white text-black"
