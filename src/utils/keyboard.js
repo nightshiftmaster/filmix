@@ -4,6 +4,7 @@ export const handleTabsKeyboardNavigation = (
   currentIndex,
   TABS,
 ) => {
+  lastKeyboardAt = Date.now();
   switch (e.key) {
     case "ArrowLeft":
       e.preventDefault();
@@ -20,8 +21,14 @@ export const handleTabsKeyboardNavigation = (
 };
 
 const ARROW_KEYS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+const KEYBOARD_GRACE_MS = 500;
+let lastKeyboardAt = 0;
+
+export const isRecentKeyboardNavigation = () =>
+  Date.now() - lastKeyboardAt < KEYBOARD_GRACE_MS;
 
 export const handleMoviesKeyboardNavigation = (e) => {
+  lastKeyboardAt = Date.now();
   if (e.key === "Tab") e.preventDefault();
   if (!ARROW_KEYS.includes(e.key)) return;
   const grid = e.currentTarget;

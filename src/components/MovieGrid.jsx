@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoHeartOutline } from "react-icons/io5";
 import { fetchMovies } from "../store/movies/actions";
 import { selectListState } from "../store/movies/selectors";
-import { handleGridKeyDown } from "../utils/keyboard";
+import { handleMoviesKeyboardNavigation } from "../utils/keyboard";
 import MovieCard from "./MovieCard";
 import Skeleton from "./Skeleton";
 import Pagination from "./Pagination";
@@ -36,8 +36,8 @@ export default function MovieGrid({
           {category}
         </h2>
         <div
-          className="flex flex-wrap gap-1 overflow-x-auto md:overflow-x-hidden overflow-y-auto max-h-[70vh] md:overflow-y-visible md:max-h-none pb-2 pt-5 pl-4 pr-2"
-          onKeyDown={handleGridKeyDown}
+          className="flex md:flex-wrap gap-1 overflow-x-auto md:overflow-x-hidden overflow-y-auto max-h-[70vh] md:overflow-y-visible md:max-h-none pb-2 pt-5 pl-4 pr-2 min-h-0"
+          onKeyDown={handleMoviesKeyboardNavigation}
         >
           {loading
             ? Array.from({ length: skeletonCount }).map((_, i) => (
