@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
-import React from 'react'
+import { Link } from "react-router-dom";
+import React from "react";
 
 export default function SearchResultsList({ loading, moviesList }) {
   return (
@@ -23,5 +23,5 @@ export default function SearchResultsList({ loading, moviesList }) {
         ))
       )}
     </ul>
-  )
+  );
 }

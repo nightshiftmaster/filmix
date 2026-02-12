@@ -71,10 +71,10 @@ export default function MovieGrid({
         </div>
         {!loading && !isFavorites && (
           <Pagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          pagesCount={totalPages}
-        />
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            pagesCount={totalPages}
+          />
         )}
       </div>
     </div>

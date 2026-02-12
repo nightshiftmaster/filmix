@@ -5,6 +5,7 @@ export const handleTabsKeyboardNavigation = (
   TABS,
 ) => {
   lastKeyboardAt = Date.now();
+  console.log(e.key);
   switch (e.key) {
     case "ArrowLeft":
       e.preventDefault();
@@ -17,6 +18,35 @@ export const handleTabsKeyboardNavigation = (
       if (currentIndex < TABS.length - 1) {
         onTabChange(TABS[currentIndex + 1].id);
       }
+  }
+};
+export const handlePaginationKeyDown = (
+  e,
+  currentPage,
+  setCurrentPage,
+  pagesCount,
+) => {
+  const goTo = (page) =>
+    setCurrentPage(Math.max(1, Math.min(pagesCount, page)));
+
+  if (e.key === "ArrowRight") {
+    e.preventDefault();
+    goTo(currentPage + 1);
+  }
+
+  if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    goTo(currentPage - 1);
+  }
+
+  if (e.key === "Home") {
+    e.preventDefault();
+    goTo(1);
+  }
+
+  if (e.key === "End") {
+    e.preventDefault();
+    goTo(pagesCount);
   }
 };
 
