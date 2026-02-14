@@ -1,4 +1,4 @@
-export const handleSearchResultsNavigation = (
+export const handleSearchKeysNavigation = (
   e,
   moviesList,
   setActiveIndex,
@@ -32,7 +32,7 @@ export const handleSearchResultsNavigation = (
   }
 };
 
-export const handleTabsKeyboardNavigation = (
+export const handleTabsKeysNavigation = (
   e,
   onTabChange,
   currentIndex,
@@ -61,7 +61,7 @@ let lastKeyboardAt = 0;
 export const isRecentKeyboardNavigation = () =>
   Date.now() - lastKeyboardAt < KEYBOARD_GRACE_MS;
 
-export const handleMoviesKeyboardNavigation = (e) => {
+export const handleMoviesKeysNavigation = (e) => {
   lastKeyboardAt = Date.now();
   if (e.key === "Tab") e.preventDefault();
   if (!ARROW_KEYS.includes(e.key)) return;
@@ -83,4 +83,4 @@ export const handleMoviesKeyboardNavigation = (e) => {
   cards[nextIndex]?.focus();
 };
 
-export const handleGridKeyDown = handleMoviesKeyboardNavigation;
+export const handleGridKeysNavigation = handleMoviesKeysNavigation;

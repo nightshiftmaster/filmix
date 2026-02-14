@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { handleTabsKeyboardNavigation } from "../utils/keyboard";
+import { handleTabsKeysNavigation } from "../utils/keyboard";
 
 const TABS = [
   { id: "popular", label: "Popular" },
@@ -39,7 +39,7 @@ export default function FilterTabs({ activeTab, onTabChange }) {
             onBlur={clear}
             onKeyDown={(e) => {
               if (e.key === "ArrowLeft" || e.key === "ArrowRight") clear();
-              handleTabsKeyboardNavigation(e, onTabChange, currentIndex, TABS);
+              handleTabsKeysNavigation(e, onTabChange, currentIndex, TABS);
             }}
             className={`
                  outline-none focus:outline-none focus-visible:outline-none

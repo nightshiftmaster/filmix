@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { IoHeartOutline } from "react-icons/io5";
 import { fetchMovies } from "../store/movies/actions";
+import ScrollButtons from "./ScrollButtons";
 import { selectListState } from "../store/movies/selectors";
-import { handleMoviesKeyboardNavigation } from "../utils/keyboard";
+import { handleMoviesKeysNavigation } from "../utils/keyboard";
 import MovieCard from "./MovieCard";
 import Skeleton from "./Skeleton";
 import Pagination from "./Pagination";
+import { motion } from "motion/react";
+import { fadeIn } from "../motion/variants";
 
 export default function MovieGrid({
   category = "Popular",
@@ -20,6 +23,7 @@ export default function MovieGrid({
 
   const [currentPage, setCurrentPage] = useState(1);
   const isFavorites = filterId === "favorites";
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     if (!isFavorites) {
@@ -27,49 +31,69 @@ export default function MovieGrid({
     }
   }, [dispatch, currentPage, filterId, isFavorites]);
 
+  const scroll = (dir) => {
+    scrollRef.current?.scrollBy({
+      left: dir === "left" ? -280 : 280,
+      behavior: "smooth",
+    });
+  };
+
   if (error) return <p className="text-red-400 p-4">{error}</p>;
 
   const skeletonCount = 15;
 
   return (
     <div className="w-full flex flex-col gap-10 md:px-20 px-4 mb-30">
-      <div className="p-10 ">
-        <h2 className="md:text-4xl  text-2xl md:text-left text-center font-bold text-white mb-4">
+      <motion.div
+        className="p-10 "
+        variants={fadeIn("center", 0.2)}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: false, amount: 0 }}
+      >
+        <h2 className="md:text-4xl text-2xl md:text-left text-center font-bold text-white mb-4">
           {category}
         </h2>
-        <div
-          className="flex md:flex-wrap gap-1 overflow-x-auto md:overflow-x-hidden overflow-y-auto max-h-[70vh] md:overflow-y-visible md:max-h-none pb-2 pt-5 pl-4 pr-2 min-h-0"
-          onKeyDown={handleMoviesKeyboardNavigation}
-        >
-          {loading
-            ? Array.from({ length: skeletonCount }).map((_, i) => (
-                <div
-                  key={i}
-                  className="shrink-0 w-[calc((100%-3*0.25rem)/4)] p-1 -m-1"
-                >
-                  <Skeleton />
-                </div>
-              ))
-            : movies?.length > 0
-              ? movies.map((movie) => (
+        <div className="relative">
+          <ScrollButtons
+            onScrollLeft={() => scroll("left")}
+            onScrollRight={() => scroll("right")}
+          />
+          <div
+            ref={scrollRef}
+            className="flex md:flex-wrap md:ml-0 ml-3  gap-1 overflow-x-auto md:overflow-x-hidden overflow-y-auto max-h-[70vh] md:overflow-y-visible md:max-h-none pb-2 pt-5 pl-4 pr-2 min-h-0"
+            onKeyDown={handleMoviesKeysNavigation}
+          >
+            {loading
+              ? Array.from({ length: skeletonCount }).map((_, i) => (
                   <div
-                    key={movie.id}
-                    className="shrink-0 md:w-[calc((100%-3*0.25rem)/4)] w-[calc((100%-3*0.25rem)/1.6)]  "
+                    key={i}
+                    className="shrink-0 w-[calc((100%-3*0.25rem)/4)] p-1 -m-1"
                   >
-                    <MovieCard movie={movie} />
+                    <Skeleton />
                   </div>
                 ))
-              : isFavorites && (
-                  <div className="flex flex-col items-center justify-center gap-4 w-full py-12">
-                    <IoHeartOutline
-                      className="text-white/50 w-16 h-16"
-                      aria-hidden
-                    />
-                    <p className="text-white/70 text-lg text-center">
-                      No favorites yet. Add movies from their detail page.
-                    </p>
-                  </div>
-                )}
+              : movies?.length > 0
+                ? movies.map((movie) => (
+                    <div
+                      key={movie.id}
+                      className="shrink-0 md:w-[calc((100%-3*0.25rem)/4)] w-[calc((100%-3*0.25rem)/1.6)]  "
+                    >
+                      <MovieCard movie={movie} />
+                    </div>
+                  ))
+                : isFavorites && (
+                    <div className="flex flex-col items-center justify-center gap-4 w-full py-12">
+                      <IoHeartOutline
+                        className="text-white/50 w-16 h-16"
+                        aria-hidden
+                      />
+                      <p className="text-white/70 text-lg text-center">
+                        No favorites yet. Add movies from their detail page.
+                      </p>
+                    </div>
+                  )}
+          </div>
         </div>
         {!loading && !isFavorites && (
           <Pagination
@@ -78,7 +102,7 @@ export default function MovieGrid({
             pagesCount={totalPages}
           />
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

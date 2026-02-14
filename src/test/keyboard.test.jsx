@@ -2,8 +2,8 @@ import React from "react";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import {
-  handleTabsKeyboardNavigation,
-  handleMoviesKeyboardNavigation,
+  handleTabsKeysNavigation,
+  handleMoviesKeysNavigation,
 } from "../utils/keyboard";
 
 const TABS = [
@@ -12,11 +12,11 @@ const TABS = [
   { id: "favorites", label: "My Favorites" },
 ];
 
-describe("handleTabsKeyboardNavigation", () => {
+describe("handleTabsKeysNavigation", () => {
   it("calls onTabChange with previous tab on ArrowLeft", () => {
     const onTabChange = vi.fn();
     const e = { key: "ArrowLeft", preventDefault: vi.fn() };
-    handleTabsKeyboardNavigation(e, onTabChange, 1, TABS);
+    handleTabsKeysNavigation(e, onTabChange, 1, TABS);
     expect(e.preventDefault).toHaveBeenCalled();
     expect(onTabChange).toHaveBeenCalledWith("popular");
   });
@@ -24,7 +24,7 @@ describe("handleTabsKeyboardNavigation", () => {
   it("does nothing on ArrowLeft when currentIndex is 0", () => {
     const onTabChange = vi.fn();
     const e = { key: "ArrowLeft", preventDefault: vi.fn() };
-    handleTabsKeyboardNavigation(e, onTabChange, 0, TABS);
+    handleTabsKeysNavigation(e, onTabChange, 0, TABS);
     expect(e.preventDefault).toHaveBeenCalled();
     expect(onTabChange).not.toHaveBeenCalled();
   });
@@ -32,7 +32,7 @@ describe("handleTabsKeyboardNavigation", () => {
   it("calls onTabChange with next tab on ArrowRight", () => {
     const onTabChange = vi.fn();
     const e = { key: "ArrowRight", preventDefault: vi.fn() };
-    handleTabsKeyboardNavigation(e, onTabChange, 0, TABS);
+    handleTabsKeysNavigation(e, onTabChange, 0, TABS);
     expect(e.preventDefault).toHaveBeenCalled();
     expect(onTabChange).toHaveBeenCalledWith("now_playing");
   });
@@ -40,17 +40,17 @@ describe("handleTabsKeyboardNavigation", () => {
   it("does nothing on ArrowRight when on last tab", () => {
     const onTabChange = vi.fn();
     const e = { key: "ArrowRight", preventDefault: vi.fn() };
-    handleTabsKeyboardNavigation(e, onTabChange, TABS.length - 1, TABS);
+    handleTabsKeysNavigation(e, onTabChange, TABS.length - 1, TABS);
     expect(e.preventDefault).toHaveBeenCalled();
     expect(onTabChange).not.toHaveBeenCalled();
   });
 });
 
-describe("handleMoviesKeyboardNavigation", () => {
+describe("handleMoviesKeysNavigation", () => {
   function Grid({ count = 8 }) {
     return (
       <div
-        onKeyDown={handleMoviesKeyboardNavigation}
+        onKeyDown={handleMoviesKeysNavigation}
         tabIndex={-1}
         data-testid="grid"
       >
@@ -195,7 +195,7 @@ describe("handleMoviesKeyboardNavigation", () => {
     const grid = card0.parentElement;
     Object.defineProperty(e, "currentTarget", { value: grid });
     Object.defineProperty(e, "target", { value: card0 });
-    handleMoviesKeyboardNavigation(e);
+    handleMoviesKeysNavigation(e);
     expect(e.preventDefault).toHaveBeenCalled();
   });
 

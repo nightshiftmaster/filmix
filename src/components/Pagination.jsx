@@ -14,7 +14,6 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
       { length: endPage - startPage + 1 },
       (_, i) => startPage + i,
     );
-
     return { visiblePages, endPage };
   }, [currentPage, pagesCount]);
 

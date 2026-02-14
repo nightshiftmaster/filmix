@@ -14,6 +14,7 @@ Movie app that lists movies from TMDB, supports search, favorites (stored in Red
 - **Redux (Toolkit)**
 - **Redux Saga**
 - **Tailwind CSS**
+- **Motion**
 - **Vitest + Testing Library**
 
 Movies data comes from [TMDB](https://www.themoviedb.org/). Create a `.env` file and add your API token: `VITE_API_ACCESS_TOKEN=your_bearer_token`.

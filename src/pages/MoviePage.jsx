@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMovieDetails } from "../store/movies/actions";
 import { selectDetailsData } from "../store/movies/selectors";
 import Skeleton from "../components/Skeleton";
 import FavoriteButton from "../components/FavoriteButton";
 import BackHomeButton from "../components/BackHomeButton";
+import { motion } from "motion/react";
+import { fadeIn } from "../motion/variants";
 
 export default function MoviePage() {
   const { id } = useParams();
@@ -54,45 +56,59 @@ export default function MoviePage() {
       )}
       <div className="relative z-10 w-[80%] mx-auto px-4 py-8 flex flex-col justify-center min-h-screen">
         <div className="flex flex-col md:flex-row gap-8">
-          <div className="shrink-0 w-full md:w-[40%]">
-            {loading ? (
+          {loading ? (
+            <div className="shrink-0 w-full md:w-[40%]">
               <Skeleton variant="poster" />
-            ) : posterUrl ? (
-              <img
-                src={posterUrl}
-                alt={data.title}
-                className="w-full rounded-xl shadow-xl"
-              />
-            ) : (
-              <div className="w-full aspect-2/3 bg-neutral-800 rounded-xl flex items-center justify-center text-neutral-500">
-                No poster
-              </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <motion.div
+              className="shrink-0 w-full md:w-[40%]"
+              variants={fadeIn("right", 0.2)}
+              initial="hidden"
+              animate="show"
+            >
+              {posterUrl ? (
+                <img
+                  src={posterUrl}
+                  alt={data.title}
+                  className="w-full rounded-xl shadow-xl"
+                />
+              ) : (
+                <div className="w-full aspect-2/3 bg-neutral-800 rounded-xl flex items-center justify-center text-neutral-500">
+                  No poster
+                </div>
+              )}
+            </motion.div>
+          )}
 
-          <div className="flex-1 gap-10 flex flex-col justify-center items-center">
-            {loading ? (
+          {loading ? (
+            <div className="flex-1 gap-10 flex flex-col justify-center items-center">
               <Skeleton variant="detail" />
-            ) : (
-              <>
-                <h1 className="text-3xl md:text-6xl font-bold mb-2 text-center">
-                  {data.title}
-                </h1>
-                {data.release_date && (
-                  <p className="text-white/80 mb-4">
-                    Release date: {data.release_date}
-                  </p>
-                )}
-                {data.overview && (
-                  <p className="text-white/90 leading-relaxed mb-6 w-[70%]">
-                    {data.overview}
-                  </p>
-                )}
-                <FavoriteButton movieId={data.id} movie={data} />
-                <BackHomeButton />
-              </>
-            )}
-          </div>
+            </div>
+          ) : (
+            <motion.div
+              className="flex-1 gap-10 flex flex-col justify-center items-center"
+              variants={fadeIn("left", 0.2)}
+              initial="hidden"
+              animate="show"
+            >
+              <h1 className="text-3xl md:text-6xl font-bold mb-2 text-center">
+                {data.title}
+              </h1>
+              {data.release_date && (
+                <p className="text-white/80 mb-4">
+                  Release date: {data.release_date}
+                </p>
+              )}
+              {data.overview && (
+                <p className="text-white/90 leading-relaxed mb-6 w-[70%]">
+                  {data.overview}
+                </p>
+              )}
+              <FavoriteButton movieId={data.id} movie={data} />
+              <BackHomeButton />
+            </motion.div>
+          )}
         </div>
       </div>
     </div>

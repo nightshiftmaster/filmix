@@ -16,7 +16,7 @@ function ScrollToTop() {
 
 function App() {
   return (
-    <div className="flex flex-col h-full justify-between">
+    <div className="flex flex-col min-h-screen">
       <ScrollToTop />
       <Header />
       <main>

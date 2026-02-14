@@ -12,7 +12,6 @@ export default function Skeleton({ variant = "card" }) {
       </div>
     );
   }
-
   if (variant === "poster") {
     return (
       <div className="w-full rounded-xl overflow-hidden bg-neutral-800  animate-pulse">
@@ -20,7 +19,6 @@ export default function Skeleton({ variant = "card" }) {
       </div>
     );
   }
-
   if (variant === "detail") {
     return (
       <div className="flex flex-col gap-4 items-center w-full">
@@ -31,6 +29,5 @@ export default function Skeleton({ variant = "card" }) {
       </div>
     );
   }
-
   return null;
 }

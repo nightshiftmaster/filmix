@@ -3,7 +3,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import SearchResultsList from "./SearchResultsList";
 import { useDebounce } from "../utils/hooks";
-import { handleSearchResultsNavigation } from "../utils/keyboard";
+import { handleSearchKeysNavigation } from "../utils/keyboard";
 import {
   fetchSearchMovies,
   RATE_LIMIT_MS,
@@ -13,7 +13,6 @@ import {
 export default function Search() {
   const navigate = useNavigate();
   const searchCalls = useRef(0);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [moviesList, setMoviesList] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -93,7 +92,7 @@ export default function Search() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) =>
-            handleSearchResultsNavigation(
+            handleSearchKeysNavigation(
               e,
               moviesList,
               setActiveIndex,
