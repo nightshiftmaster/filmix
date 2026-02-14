@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { IoHeartOutline } from "react-icons/io5";
 import { fetchMovies } from "../store/movies/actions";
 import { selectListState } from "../store/movies/selectors";
@@ -13,9 +13,11 @@ export default function MovieGrid({
   filterId = "popular",
 }) {
   const dispatch = useDispatch();
-  const { movies, loading, error, totalPages } = useSelector((state) =>
-    selectListState(state, filterId),
+  const { movies, loading, error, totalPages } = useSelector(
+    (state) => selectListState(state, filterId),
+    shallowEqual,
   );
+
   const [currentPage, setCurrentPage] = useState(1);
   const isFavorites = filterId === "favorites";
 

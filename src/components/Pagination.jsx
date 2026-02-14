@@ -1,31 +1,38 @@
-import React from "react";
+import React, { memo, useCallback, useMemo } from "react";
 
-export default function Pagination({
-  currentPage,
-  setCurrentPage,
-  pagesCount,
-}) {
-  if (!pagesCount) return null;
+function Pagination({ currentPage, setCurrentPage, pagesCount }) {
+  if (!pagesCount || pagesCount <= 1) return null;
 
   const pagesPerBlock = 5;
-  const startPage =
-    Math.floor((currentPage - 1) / pagesPerBlock) * pagesPerBlock + 1;
-  const endPage = Math.min(startPage + pagesPerBlock - 1, pagesCount);
-  const visiblePages = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, i) => startPage + i,
+
+  const { visiblePages, endPage } = useMemo(() => {
+    const startPage =
+      Math.floor((currentPage - 1) / pagesPerBlock) * pagesPerBlock + 1;
+    const endPage = Math.min(startPage + pagesPerBlock - 1, pagesCount);
+
+    const visiblePages = Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i,
+    );
+
+    return { visiblePages, endPage };
+  }, [currentPage, pagesCount]);
+
+  const goTo = useCallback(
+    (page) => {
+      const next = Math.max(1, Math.min(pagesCount, page));
+      if (next !== currentPage) setCurrentPage(next);
+    },
+    [pagesCount, currentPage, setCurrentPage],
   );
 
-  const goTo = (page) =>
-    setCurrentPage(Math.max(1, Math.min(pagesCount, page)));
-
   return (
-    <div
+    <nav
       className="flex justify-center items-center gap-2"
-      role="navigation"
       aria-label="Pagination"
     >
       <button
+        type="button"
         className="px-4 py-2 font-bold rounded-md border border-gray-800 text-white disabled:opacity-50 hover:bg-gray-500"
         disabled={currentPage === 1}
         onClick={() => goTo(currentPage - 1)}
@@ -36,6 +43,7 @@ export default function Pagination({
       {visiblePages.map((page) => (
         <button
           key={page}
+          type="button"
           className={`px-4 py-2 font-bold rounded-md border border-gray-800 ${
             page === currentPage
               ? "bg-white text-black"
@@ -58,12 +66,15 @@ export default function Pagination({
       )}
 
       <button
+        type="button"
         className="px-4 py-2 font-bold rounded-md border border-gray-800 text-white disabled:opacity-50 hover:bg-gray-500"
         disabled={currentPage === pagesCount}
         onClick={() => goTo(currentPage + 1)}
       >
         Next
       </button>
-    </div>
+    </nav>
   );
 }
+
+export default memo(Pagination);
