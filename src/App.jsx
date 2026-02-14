@@ -1,14 +1,23 @@
-import React, { useState } from 'react'
-import './App.css'
-import { Routes, Route, Link } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import MoviePage from './pages/MoviePage'
-import Footer from './components/Footer'
-import Header from './components/Header'
+import React, { useEffect } from "react";
+import "./App.css";
+import { Routes, Route, useLocation } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import MoviePage from "./pages/MoviePage";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
+  return null;
+}
 
 function App() {
   return (
     <div className="flex flex-col h-full justify-between">
+      <ScrollToTop />
       <Header />
       <main>
         <Routes>
@@ -18,7 +27,7 @@ function App() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

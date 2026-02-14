@@ -1,3 +1,37 @@
+export const handleSearchResultsNavigation = (
+  e,
+  moviesList,
+  setActiveIndex,
+  showDropdown,
+  closeDropdown,
+  openActiveMovie,
+  activeIndex,
+) => {
+  if (!showDropdown) return;
+
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    setActiveIndex((i) => Math.min(i + 1, moviesList.length - 1));
+  }
+
+  if (e.key === "ArrowUp") {
+    e.preventDefault();
+    setActiveIndex((i) => Math.max(i - 1, 0));
+  }
+
+  if (e.key === "Enter") {
+    if (activeIndex >= 0) {
+      e.preventDefault();
+      openActiveMovie();
+    }
+  }
+
+  if (e.key === "Escape") {
+    e.preventDefault();
+    closeDropdown();
+  }
+};
+
 export const handleTabsKeyboardNavigation = (
   e,
   onTabChange,
@@ -5,7 +39,6 @@ export const handleTabsKeyboardNavigation = (
   TABS,
 ) => {
   lastKeyboardAt = Date.now();
-  console.log(e.key);
   switch (e.key) {
     case "ArrowLeft":
       e.preventDefault();
@@ -18,35 +51,6 @@ export const handleTabsKeyboardNavigation = (
       if (currentIndex < TABS.length - 1) {
         onTabChange(TABS[currentIndex + 1].id);
       }
-  }
-};
-export const handlePaginationKeyDown = (
-  e,
-  currentPage,
-  setCurrentPage,
-  pagesCount,
-) => {
-  const goTo = (page) =>
-    setCurrentPage(Math.max(1, Math.min(pagesCount, page)));
-
-  if (e.key === "ArrowRight") {
-    e.preventDefault();
-    goTo(currentPage + 1);
-  }
-
-  if (e.key === "ArrowLeft") {
-    e.preventDefault();
-    goTo(currentPage - 1);
-  }
-
-  if (e.key === "Home") {
-    e.preventDefault();
-    goTo(1);
-  }
-
-  if (e.key === "End") {
-    e.preventDefault();
-    goTo(pagesCount);
   }
 };
 

@@ -25,7 +25,7 @@ export default function MovieGrid({
     }
   }, [dispatch, currentPage, filterId, isFavorites]);
 
-  if (error) return <p className="text-red-400 p-4">Error: {error}</p>;
+  if (error) return <p className="text-red-400 p-4">{error}</p>;
 
   const skeletonCount = 15;
 

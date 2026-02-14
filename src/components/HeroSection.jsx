@@ -1,9 +1,8 @@
-import React from 'react'
-import Search from './Search'
+import React from "react";
 
-export default function HeroSection() {
+function HeroSection() {
   return (
-    <div className="relative z-10 h-[60vh] w-full shrink-0 overflow-visible">
+    <div className="relative z-10 md:h-[55vh] h-[40vh] w-full shrink-0 overflow-visible">
       <div className="absolute inset-0 z-0">
         <img
           src="/hero-bg.webp"
@@ -13,12 +12,13 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      <div className="relative z-10 bottom-3 flex justify-center items-center h-[calc(100%-5rem)]">
+      <div className="relative z-10 md:top-20 top-30 flex justify-center items-center h-[calc(100%-5rem)]">
         <h1 className="text-white md:text-6xl text-4xl font-bold text-center">
           The best movies <br /> in one place
         </h1>
       </div>
-      <Search />
     </div>
-  )
+  );
 }
+
+export default React.memo(HeroSection);

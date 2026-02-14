@@ -1,62 +1,44 @@
-import React, { useEffect } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  fetchMovieDetails,
-  addFavorite,
-  removeFavorite,
-} from '../store/movies/actions'
-import { selectDetailsData, selectIsFavorite } from '../store/movies/selectors'
-import Skeleton from '../components/Skeleton'
+import React, { useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMovieDetails } from "../store/movies/actions";
+import { selectDetailsData } from "../store/movies/selectors";
+import Skeleton from "../components/Skeleton";
+import FavoriteButton from "../components/FavoriteButton";
+import BackHomeButton from "../components/BackHomeButton";
 
 export default function MoviePage() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const { data, loading, error } = useSelector(selectDetailsData)
-  const isFavorite = useSelector((state) => selectIsFavorite(state, data?.id))
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector(selectDetailsData);
 
   useEffect(() => {
-    if (id) dispatch(fetchMovieDetails(Number(id)))
-  }, [dispatch, id])
+    if (id) dispatch(fetchMovieDetails(Number(id)));
+  }, [dispatch, id]);
 
   useEffect(() => {
     const handleEscapeKey = (e) => {
-      if (e.key === 'Escape') navigate('/')
-    }
-    window.addEventListener('keydown', handleEscapeKey)
-    return () => window.removeEventListener('keydown', handleEscapeKey)
-  }, [navigate])
+      if (e.key === "Escape") navigate("/");
+    };
+    window.addEventListener("keydown", handleEscapeKey);
+    return () => window.removeEventListener("keydown", handleEscapeKey);
+  }, [navigate]);
 
   if (error || (!loading && !data)) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-4 p-4">
-        <p className="text-red-400 text-xl">{error || 'Movie not found'}</p>
-        <Link to="/" className="text-white underline">
-          Back to home
-        </Link>
+        <p className="text-red-400 text-xl">{error || "Movie not found"}</p>
+        <BackHomeButton />
       </div>
-    )
+    );
   }
 
   const posterUrl =
-    data?.poster_path && `https://image.tmdb.org/t/p/w500${data.poster_path}`
+    data?.poster_path && `https://image.tmdb.org/t/p/w500${data.poster_path}`;
   const backdropUrl =
     data?.backdrop_path &&
-    `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`
-
-  const handleToggleFavorite = () => {
-    if (!data) return
-    if (isFavorite) {
-      dispatch(removeFavorite(data.id))
-    } else {
-      dispatch(
-        addFavorite({
-          ...data,
-        })
-      )
-    }
-  }
+    `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`;
 
   return (
     <div className="relative min-h-screen bg-black flex text-white">
@@ -106,24 +88,13 @@ export default function MoviePage() {
                     {data.overview}
                   </p>
                 )}
-                <button
-                  type="button"
-                  onClick={handleToggleFavorite}
-                  className="px-6 py-3 rounded-lg font-medium bg-white text-black hover:bg-gray-300 transition-colors"
-                >
-                  {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
-                </button>
-                <Link
-                  to="/"
-                  className="inline-block text-white bg-white/10 hover:bg-white/20 mb-6 border w-fit mx-auto border-white/10 px-6 py-3 rounded-lg"
-                >
-                  ← Back to home
-                </Link>
+                <FavoriteButton movieId={data.id} movie={data} />
+                <BackHomeButton />
               </>
             )}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

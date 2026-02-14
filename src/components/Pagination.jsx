@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import { handlePaginationKeyDown } from "../utils/keyboard";
+import React from "react";
 
 export default function Pagination({
   currentPage,
@@ -17,23 +16,13 @@ export default function Pagination({
     (_, i) => startPage + i,
   );
 
-  const rootRef = useRef(null);
-
-  useEffect(() => {
-    rootRef.current?.focus();
-  }, [currentPage]);
-
   const goTo = (page) =>
     setCurrentPage(Math.max(1, Math.min(pagesCount, page)));
 
   return (
     <div
-      ref={rootRef}
-      tabIndex={0}
-      onKeyDown={(e) =>
-        handlePaginationKeyDown(e, currentPage, setCurrentPage, pagesCount)
-      }
-      className="flex justify-center items-center gap-2 outline-none"
+      className="flex justify-center items-center gap-2"
+      role="navigation"
       aria-label="Pagination"
     >
       <button
