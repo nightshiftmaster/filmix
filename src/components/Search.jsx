@@ -113,6 +113,7 @@ export default function Search() {
             loading={loading}
             moviesList={moviesList}
             activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
             onClose={closeDropdown}
           />
         )

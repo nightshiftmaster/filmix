@@ -43,7 +43,7 @@ export default function MoviePage() {
     `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`;
 
   return (
-    <div className="relative min-h-screen bg-black flex text-white">
+    <div className="relative min-h-screen bg-black flex text-white pt-24 md:pt-0">
       {backdropUrl && (
         <div className="absolute inset-0 z-0">
           <img
@@ -54,7 +54,7 @@ export default function MoviePage() {
           <div className="absolute inset-0 bg-black/50" />
         </div>
       )}
-      <div className="relative z-10 w-[80%] mx-auto px-4 py-8 flex flex-col justify-center min-h-screen">
+      <div className="relative z-10 w-[80%] mx-auto px-4 py-8 flex flex-col justify-center min-h-[calc(100vh-6rem)] md:min-h-screen">
         <div className="flex flex-col md:flex-row gap-8">
           {loading ? (
             <div className="shrink-0 w-full md:w-[40%]">

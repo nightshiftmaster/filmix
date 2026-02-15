@@ -1,14 +1,13 @@
 import React, { memo, useCallback, useMemo } from "react";
 
 function Pagination({ currentPage, setCurrentPage, pagesCount }) {
+  const PAGES_PER_BLOCK = 5;
   if (!pagesCount || pagesCount <= 1) return null;
-
-  const pagesPerBlock = 5;
 
   const { visiblePages, endPage } = useMemo(() => {
     const startPage =
-      Math.floor((currentPage - 1) / pagesPerBlock) * pagesPerBlock + 1;
-    const endPage = Math.min(startPage + pagesPerBlock - 1, pagesCount);
+      Math.floor((currentPage - 1) / PAGES_PER_BLOCK) * PAGES_PER_BLOCK + 1;
+    const endPage = Math.min(startPage + PAGES_PER_BLOCK - 1, pagesCount);
 
     const visiblePages = Array.from(
       { length: endPage - startPage + 1 },
@@ -27,26 +26,28 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
 
   return (
     <nav
-      className="flex justify-center items-center gap-2"
+      className="flex flex-wrap justify-center items-center gap-1 md:gap-2"
       aria-label="Pagination"
     >
       <button
         type="button"
-        className="px-4 py-2 font-bold rounded-md border border-gray-800 text-white disabled:opacity-50 hover:bg-gray-500"
+        className="font-bold rounded-md border border-gray-800 disabled:opacity-50 hover:bg-gray-500 px-2 py-1.5 md:px-4 md:py-2 text-sm md:text-base text-white"
         disabled={currentPage === 1}
         onClick={() => goTo(currentPage - 1)}
+        aria-label="Previous page"
       >
-        Previous
+        <span className="hidden sm:inline">Previous</span>
+        <span className="sm:hidden">Prev</span>
       </button>
 
       {visiblePages.map((page) => (
         <button
           key={page}
           type="button"
-          className={`px-4 py-2 font-bold rounded-md border border-gray-800 ${
+          className={`min-w-9 md:min-w-0 font-bold rounded-md border border-gray-800 hover:bg-gray-500 px-2 py-1.5 md:px-4 md:py-2 text-sm md:text-base ${
             page === currentPage
               ? "bg-white text-black"
-              : "bg-gray-800 text-white hover:bg-gray-500"
+              : "bg-gray-800 text-white"
           }`}
           onClick={() => goTo(page)}
           aria-current={page === currentPage ? "page" : undefined}
@@ -57,7 +58,7 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
 
       {endPage < pagesCount && (
         <span
-          className="px-1 text-white/70 text-lg font-bold"
+          className="px-0.5 md:px-1 text-white/70 text-base md:text-lg font-bold"
           aria-hidden="true"
         >
           …
@@ -66,9 +67,10 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
 
       <button
         type="button"
-        className="px-4 py-2 font-bold rounded-md border border-gray-800 text-white disabled:opacity-50 hover:bg-gray-500"
+        className="font-bold rounded-md border border-gray-800 disabled:opacity-50 hover:bg-gray-500 px-2 py-1.5 md:px-4 md:py-2 text-sm md:text-base text-white"
         disabled={currentPage === pagesCount}
         onClick={() => goTo(currentPage + 1)}
+        aria-label="Next page"
       >
         Next
       </button>
