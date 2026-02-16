@@ -4,6 +4,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import {
   handleTabsKeyDown,
   handleMoviesKeyDown,
+  handlePaginationKeyDown,
 } from "../utils/keyboard";
 
 const TABS = [
@@ -169,12 +170,48 @@ describe("handleMoviesKeyDown", () => {
     expect(document.activeElement).toBe(card8);
   });
 
+  it("ArrowDown from last row focuses pagination button when pagination exists", () => {
+    render(
+      <>
+        <Grid count={10} />
+        <nav data-section="pagination">
+          <button type="button" data-testid="page-btn">
+            1
+          </button>
+        </nav>
+      </>,
+    );
+    const card8 = screen.getByTestId("card-8");
+    const pageBtn = screen.getByTestId("page-btn");
+    card8.focus();
+    fireEvent.keyDown(card8, { key: "ArrowDown" });
+    expect(document.activeElement).toBe(pageBtn);
+  });
+
   it("ArrowUp from first row moves to tabs or keeps focus when no tabs", () => {
     render(<Grid count={10} />);
     const card2 = screen.getByTestId("card-2");
     card2.focus();
     fireEvent.keyDown(card2, { key: "ArrowUp" });
     expect(document.activeElement).toBe(card2);
+  });
+
+  it("ArrowUp from first row focuses first tab when tabs exist", () => {
+    render(
+      <>
+        <div data-section="filter-tabs">
+          <button type="button" data-testid="first-tab">
+            Popular
+          </button>
+        </div>
+        <Grid count={10} />
+      </>,
+    );
+    const card2 = screen.getByTestId("card-2");
+    const firstTab = screen.getByTestId("first-tab");
+    card2.focus();
+    fireEvent.keyDown(card2, { key: "ArrowUp" });
+    expect(document.activeElement).toBe(firstTab);
   });
 
   it("does nothing when keydown target is not a card", () => {
@@ -223,5 +260,60 @@ describe("handleMoviesKeyDown", () => {
     card5.focus();
     fireEvent.keyDown(card5, { key: "ArrowUp" });
     expect(document.activeElement).toBe(card1);
+  });
+});
+
+describe("handlePaginationKeyDown", () => {
+  function PaginationWithCards() {
+    return (
+      <>
+        <div data-movie-card tabIndex={0} data-testid="card-0">
+          Card 0
+        </div>
+        <div data-movie-card tabIndex={0} data-testid="card-1">
+          Card 1
+        </div>
+        <nav onKeyDown={handlePaginationKeyDown} data-testid="pagination">
+          <button type="button" data-testid="prev">
+            Prev
+          </button>
+          <button type="button" data-testid="page-2">
+            2
+          </button>
+          <button type="button" data-testid="next">
+            Next
+          </button>
+        </nav>
+      </>
+    );
+  }
+
+  it("moves focus left and right between pagination buttons", () => {
+    render(<PaginationWithCards />);
+    const prev = screen.getByTestId("prev");
+    const page2 = screen.getByTestId("page-2");
+    const next = screen.getByTestId("next");
+
+    page2.focus();
+    fireEvent.keyDown(page2, { key: "ArrowLeft" });
+    expect(document.activeElement).toBe(prev);
+
+    prev.focus();
+    fireEvent.keyDown(prev, { key: "ArrowRight" });
+    expect(document.activeElement).toBe(page2);
+
+    page2.focus();
+    fireEvent.keyDown(page2, { key: "ArrowRight" });
+    expect(document.activeElement).toBe(next);
+  });
+
+  it("moves focus up from pagination to last movie card", () => {
+    render(<PaginationWithCards />);
+    const page2 = screen.getByTestId("page-2");
+    const lastCard = screen.getByTestId("card-1");
+
+    page2.focus();
+    fireEvent.keyDown(page2, { key: "ArrowUp" });
+    expect(document.activeElement).toBe(lastCard);
   });
 });
