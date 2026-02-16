@@ -6,6 +6,7 @@ import { selectDetailsData } from "../store/movies/selectors";
 import Skeleton from "../components/Skeleton";
 import FavoriteButton from "../components/FavoriteButton";
 import BackHomeButton from "../components/BackHomeButton";
+import { useMoviePageKeyboard } from "../hooks/usePageKeyboard";
 import { motion } from "motion/react";
 import { fadeIn } from "../motion/variants";
 
@@ -19,13 +20,7 @@ export default function MoviePage() {
     if (id) dispatch(fetchMovieDetails(Number(id)));
   }, [dispatch, id]);
 
-  useEffect(() => {
-    const handleEscapeKey = (e) => {
-      if (e.key === "Escape") navigate("/");
-    };
-    window.addEventListener("keydown", handleEscapeKey);
-    return () => window.removeEventListener("keydown", handleEscapeKey);
-  }, [navigate]);
+  useMoviePageKeyboard(navigate);
 
   if (error || (!loading && !data)) {
     return (

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { handleTabsKeysNavigation } from "../utils/keyboard";
+import { handleFilterTabsKeyDown } from "../utils/keyboard";
 
 const TABS = [
   { id: "popular", label: "Popular" },
@@ -20,7 +20,10 @@ export default function FilterTabs({ activeTab, onTabChange }) {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="flex gap-0 border-b border-gray-700 justify-center items-center w-[85%]">
+      <div
+        className="flex gap-0 border-b border-gray-700 justify-center items-center w-[85%]"
+        data-section="filter-tabs"
+      >
         {TABS.map((tab) => (
           <button
             key={tab.id}
@@ -37,10 +40,14 @@ export default function FilterTabs({ activeTab, onTabChange }) {
               }, 2000);
             }}
             onBlur={clear}
-            onKeyDown={(e) => {
-              if (e.key === "ArrowLeft" || e.key === "ArrowRight") clear();
-              handleTabsKeysNavigation(e, onTabChange, currentIndex, TABS);
-            }}
+            onKeyDown={(e) =>
+              handleFilterTabsKeyDown(e, {
+                currentIndex,
+                onTabChange,
+                TABS,
+                clear,
+              })
+            }
             className={`
                  outline-none focus:outline-none focus-visible:outline-none
               md:px-6 px-2 md:py-3 py-2 font-medium rounded-t-lg border border-gray-600 text-xs md:text-base border-b-0

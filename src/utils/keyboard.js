@@ -1,4 +1,4 @@
-export const handleSearchKeysNavigation = (
+export const handleSearchKeyDown = (
   e,
   moviesList,
   setActiveIndex,
@@ -32,12 +32,7 @@ export const handleSearchKeysNavigation = (
   }
 };
 
-export const handleTabsKeysNavigation = (
-  e,
-  onTabChange,
-  currentIndex,
-  TABS,
-) => {
+export const handleTabsKeyDown = (e, onTabChange, currentIndex, TABS) => {
   lastKeyboardAt = Date.now();
   switch (e.key) {
     case "ArrowLeft":
@@ -54,14 +49,62 @@ export const handleTabsKeysNavigation = (
   }
 };
 
+export const handleFilterTabsKeyDown = (
+  e,
+  { currentIndex, onTabChange, TABS, clear },
+) => {
+  if (e.key === "ArrowUp" && currentIndex === 0) {
+    e.preventDefault();
+    document.querySelector("[data-section='search']")?.focus();
+    return;
+  }
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    document.querySelector("[data-movie-card]")?.focus();
+    return;
+  }
+  if (e.key === "ArrowLeft" || e.key === "ArrowRight") clear();
+  handleTabsKeyDown(e, onTabChange, currentIndex, TABS);
+};
+
+export const handlePaginationKeyDown = (e) => {
+  if (e.key !== "ArrowLeft" && e.key !== "ArrowRight" && e.key !== "ArrowUp")
+    return;
+  const nav = e.currentTarget;
+  const buttons = [...nav.querySelectorAll("button")];
+  const focused = e.target.closest?.("button") || document.activeElement;
+  const currentIndex = buttons.indexOf(focused);
+
+  if (e.key === "ArrowUp") {
+    e.preventDefault();
+    const cards = document.querySelectorAll("[data-movie-card]");
+    cards[cards.length - 1]?.focus();
+    return;
+  }
+
+  if (e.key === "ArrowLeft" && currentIndex > 0) {
+    e.preventDefault();
+    buttons[currentIndex - 1].focus();
+  }
+  if (
+    e.key === "ArrowRight" &&
+    currentIndex >= 0 &&
+    currentIndex < buttons.length - 1
+  ) {
+    e.preventDefault();
+    buttons[currentIndex + 1].focus();
+  }
+};
+
 const ARROW_KEYS = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 const KEYBOARD_GRACE_MS = 500;
+const GRID_COLUMNS = 4;
 let lastKeyboardAt = 0;
 
 export const isRecentKeyboardNavigation = () =>
   Date.now() - lastKeyboardAt < KEYBOARD_GRACE_MS;
 
-export const handleMoviesKeysNavigation = (e) => {
+export const handleMoviesKeyDown = (e) => {
   lastKeyboardAt = Date.now();
   if (e.key === "Tab") e.preventDefault();
   if (!ARROW_KEYS.includes(e.key)) return;
@@ -70,6 +113,15 @@ export const handleMoviesKeysNavigation = (e) => {
   const focusedCard = e.target.closest("[data-movie-card]");
   const currentIndex = cards.indexOf(focusedCard);
   if (currentIndex === -1) return;
+
+  if (e.key === "ArrowUp" && currentIndex < GRID_COLUMNS) {
+    e.preventDefault();
+    document
+      .querySelector("[data-section='filter-tabs']")
+      ?.querySelector("button")
+      ?.focus();
+    return;
+  }
 
   const step =
     e.key === "ArrowRight"
@@ -83,4 +135,4 @@ export const handleMoviesKeysNavigation = (e) => {
   cards[nextIndex]?.focus();
 };
 
-export const handleGridKeysNavigation = handleMoviesKeysNavigation;
+export const handleGridKeyDown = handleMoviesKeyDown;

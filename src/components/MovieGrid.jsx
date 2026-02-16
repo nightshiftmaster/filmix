@@ -4,7 +4,7 @@ import { IoHeartOutline } from "react-icons/io5";
 import { fetchMovies } from "../store/movies/actions";
 import ScrollButtons from "./ScrollButtons";
 import { selectListState } from "../store/movies/selectors";
-import { handleMoviesKeysNavigation } from "../utils/keyboard";
+import { handleMoviesKeyDown } from "../utils/keyboard";
 import MovieCard from "./MovieCard";
 import Skeleton from "./Skeleton";
 import Pagination from "./Pagination";
@@ -61,8 +61,9 @@ export default function MovieGrid({
           />
           <div
             ref={scrollRef}
-            className="flex md:flex-wrap md:ml-0 ml-3  gap-1 overflow-x-auto md:overflow-x-hidden overflow-y-auto max-h-[70vh] md:overflow-y-visible md:max-h-none pb-2 pt-5 pl-4 pr-2 min-h-0"
-            onKeyDown={handleMoviesKeysNavigation}
+            className="flex md:flex-wrap md:ml-0 ml-3 gap-1 overflow-x-auto md:overflow-x-hidden overflow-y-auto max-h-[70vh] md:overflow-y-visible md:max-h-none pb-2 pt-5 pl-4 pr-2 min-h-0"
+            onKeyDown={handleMoviesKeyDown}
+            onWheel={(e) => e.preventDefault()}
           >
             {loading
               ? Array.from({ length: skeletonCount }).map((_, i) => (

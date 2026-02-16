@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import Search from "./Search";
+import KeyboardShortcutsTooltip from "./KeyboardShortcutsTooltip";
 import { motion } from "motion/react";
 import { fadeIn } from "../motion/variants";
 
@@ -19,6 +20,7 @@ export default function Header() {
         <h1 className="text-white md:text-5xl text-4xl font-bold">Filmix</h1>
       </Link>
       <Search />
+      <KeyboardShortcutsTooltip />
     </motion.header>
   );
 }

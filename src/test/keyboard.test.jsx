@@ -2,8 +2,8 @@ import React from "react";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import {
-  handleTabsKeysNavigation,
-  handleMoviesKeysNavigation,
+  handleTabsKeyDown,
+  handleMoviesKeyDown,
 } from "../utils/keyboard";
 
 const TABS = [
@@ -12,11 +12,11 @@ const TABS = [
   { id: "favorites", label: "My Favorites" },
 ];
 
-describe("handleTabsKeysNavigation", () => {
+describe("handleTabsKeyDown", () => {
   it("calls onTabChange with previous tab on ArrowLeft", () => {
     const onTabChange = vi.fn();
     const e = { key: "ArrowLeft", preventDefault: vi.fn() };
-    handleTabsKeysNavigation(e, onTabChange, 1, TABS);
+    handleTabsKeyDown(e, onTabChange, 1, TABS);
     expect(e.preventDefault).toHaveBeenCalled();
     expect(onTabChange).toHaveBeenCalledWith("popular");
   });
@@ -24,7 +24,7 @@ describe("handleTabsKeysNavigation", () => {
   it("does nothing on ArrowLeft when currentIndex is 0", () => {
     const onTabChange = vi.fn();
     const e = { key: "ArrowLeft", preventDefault: vi.fn() };
-    handleTabsKeysNavigation(e, onTabChange, 0, TABS);
+    handleTabsKeyDown(e, onTabChange, 0, TABS);
     expect(e.preventDefault).toHaveBeenCalled();
     expect(onTabChange).not.toHaveBeenCalled();
   });
@@ -32,7 +32,7 @@ describe("handleTabsKeysNavigation", () => {
   it("calls onTabChange with next tab on ArrowRight", () => {
     const onTabChange = vi.fn();
     const e = { key: "ArrowRight", preventDefault: vi.fn() };
-    handleTabsKeysNavigation(e, onTabChange, 0, TABS);
+    handleTabsKeyDown(e, onTabChange, 0, TABS);
     expect(e.preventDefault).toHaveBeenCalled();
     expect(onTabChange).toHaveBeenCalledWith("now_playing");
   });
@@ -40,17 +40,17 @@ describe("handleTabsKeysNavigation", () => {
   it("does nothing on ArrowRight when on last tab", () => {
     const onTabChange = vi.fn();
     const e = { key: "ArrowRight", preventDefault: vi.fn() };
-    handleTabsKeysNavigation(e, onTabChange, TABS.length - 1, TABS);
+    handleTabsKeyDown(e, onTabChange, TABS.length - 1, TABS);
     expect(e.preventDefault).toHaveBeenCalled();
     expect(onTabChange).not.toHaveBeenCalled();
   });
 });
 
-describe("handleMoviesKeysNavigation", () => {
+describe("handleMoviesKeyDown", () => {
   function Grid({ count = 8 }) {
     return (
       <div
-        onKeyDown={handleMoviesKeysNavigation}
+        onKeyDown={handleMoviesKeyDown}
         tabIndex={-1}
         data-testid="grid"
       >
@@ -170,13 +170,12 @@ describe("handleMoviesKeysNavigation", () => {
     expect(document.activeElement).toBe(card2);
   });
 
-  it("ArrowUp from first row wraps (10 cards)", () => {
+  it("ArrowUp from first row moves to tabs or keeps focus when no tabs", () => {
     render(<Grid count={10} />);
     const card2 = screen.getByTestId("card-2");
-    const card8 = screen.getByTestId("card-8");
     card2.focus();
     fireEvent.keyDown(card2, { key: "ArrowUp" });
-    expect(document.activeElement).toBe(card8);
+    expect(document.activeElement).toBe(card2);
   });
 
   it("does nothing when keydown target is not a card", () => {
@@ -195,7 +194,7 @@ describe("handleMoviesKeysNavigation", () => {
     const grid = card0.parentElement;
     Object.defineProperty(e, "currentTarget", { value: grid });
     Object.defineProperty(e, "target", { value: card0 });
-    handleMoviesKeysNavigation(e);
+    handleMoviesKeyDown(e);
     expect(e.preventDefault).toHaveBeenCalled();
   });
 

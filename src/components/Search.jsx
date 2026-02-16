@@ -3,7 +3,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import SearchResultsList from "./SearchResultsList";
 import { useDebounce } from "../utils/hooks";
-import { handleSearchKeysNavigation } from "../utils/keyboard";
+import { handleSearchKeyDown } from "../utils/keyboard";
 import {
   fetchSearchMovies,
   RATE_LIMIT_MS,
@@ -88,11 +88,20 @@ export default function Search() {
         <input
           type="text"
           placeholder="Search for a movie"
+          data-section="search"
           className="w-full p-2 px-10 text-white text-lg rounded-full bg-gray-600 outline-none focus:bg-white focus:text-gray-700"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyDown={(e) =>
-            handleSearchKeysNavigation(
+          onKeyDown={(e) => {
+            if (!showDropdown && e.key === "ArrowDown") {
+              e.preventDefault();
+              document
+                .querySelector("[data-section='filter-tabs']")
+                ?.querySelector("button")
+                ?.focus();
+              return;
+            }
+            handleSearchKeyDown(
               e,
               moviesList,
               setActiveIndex,
@@ -100,8 +109,8 @@ export default function Search() {
               closeDropdown,
               openActiveMovie,
               activeIndex,
-            )
-          }
+            );
+          }}
         />
       </div>
 

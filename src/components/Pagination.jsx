@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useMemo } from "react";
+import { handlePaginationKeyDown } from "../utils/keyboard";
 
 function Pagination({ currentPage, setCurrentPage, pagesCount }) {
   const PAGES_PER_BLOCK = 5;
@@ -26,8 +27,10 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
 
   return (
     <nav
+      data-section="pagination"
       className="flex flex-wrap justify-center items-center gap-1 md:gap-2"
       aria-label="Pagination"
+      onKeyDown={handlePaginationKeyDown}
     >
       <button
         type="button"

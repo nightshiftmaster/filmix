@@ -18,8 +18,9 @@ export default function FavoriteButton({ movieId, movie }) {
   return (
     <button
       type="button"
+      data-section="add-favorites"
       onClick={handleToggle}
-      className="px-6 py-3 rounded-lg font-medium bg-white text-black hover:bg-gray-300 transition-colors"
+      className="px-6 py-3 rounded-lg font-medium bg-white text-black hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
     >
       {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
     </button>
