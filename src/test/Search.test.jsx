@@ -73,4 +73,24 @@ describe("Search debounce", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock.mock.calls[0][0]).toContain("query=abc");
   });
+
+  it("does not send request for query shorter than 2 chars", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ results: [] }),
+    });
+    global.fetch = fetchMock;
+
+    renderSearch();
+    const input = screen.getByPlaceholderText("Search for a movie");
+
+    await act(async () => {
+      fireEvent.change(input, { target: { value: "a" } });
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(500);
+    });
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 });

@@ -19,6 +19,10 @@ export function useAppScrollControls(containerRef) {
 
   useEffect(() => {
     const onKeyDown = (e) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        return;
+      }
       if (isInputFocused() || e.defaultPrevented) return;
       const container = containerRef.current;
       if (!container) return;

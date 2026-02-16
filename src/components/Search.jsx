@@ -33,13 +33,10 @@ export default function Search() {
     const query = debouncedQuery.trim();
 
     if (query.length < 2) {
-      return;
-    }
-
-    if (!query) {
       setMoviesList([]);
       setActiveIndex(-1);
       setLoading(false);
+      setError(null);
       return;
     }
 
