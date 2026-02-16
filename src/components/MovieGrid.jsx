@@ -43,7 +43,7 @@ export default function MovieGrid({
   const skeletonCount = 15;
 
   return (
-    <div className="w-full flex flex-col gap-10 md:px-20 p-3  mb-30">
+    <div className="w-full  flex flex-col gap-10 md:px-20 p-3  mb-30">
       <motion.div
         className="px-7 "
         variants={fadeIn("center", 0.2)}

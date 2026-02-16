@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import SearchResultsList from "./SearchResultsList";
-import { useDebounce } from "../utils/hooks";
+import { useDebounce } from "../hooks/useDebounce";
 import { handleSearchKeyDown } from "../utils/keyboard";
 import {
   fetchSearchMovies,
