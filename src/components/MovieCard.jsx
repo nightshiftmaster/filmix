@@ -8,6 +8,8 @@ export default function MovieCard({ movie }) {
       to={`/movie/${movie.id}`}
       data-movie-card
       onMouseEnter={(e) => {
+        if (document.activeElement?.closest("[data-section='pagination']"))
+          return;
         if (!isRecentKeyboardNavigation()) e.currentTarget.focus();
       }}
       onMouseLeave={(e) => e.currentTarget.blur()}

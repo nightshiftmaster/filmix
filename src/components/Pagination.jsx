@@ -1,5 +1,8 @@
-import React, { memo, useCallback, useMemo } from "react";
-import { handlePaginationKeyDown } from "../utils/keyboard";
+import React, { memo, useMemo } from "react";
+import {
+  handlePaginationKeyDown,
+  markKeyboardNavigation,
+} from "../utils/keyboard";
 
 function Pagination({ currentPage, setCurrentPage, pagesCount }) {
   const PAGES_PER_BLOCK = 5;
@@ -17,13 +20,10 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
     return { visiblePages, endPage };
   }, [currentPage, pagesCount]);
 
-  const goTo = useCallback(
-    (page) => {
-      const next = Math.max(1, Math.min(pagesCount, page));
-      if (next !== currentPage) setCurrentPage(next);
-    },
-    [pagesCount, currentPage, setCurrentPage],
-  );
+  const goTo = (page) => {
+    const next = Math.max(1, Math.min(pagesCount, page));
+    if (next !== currentPage) setCurrentPage(next);
+  };
 
   return (
     <nav
@@ -31,6 +31,7 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
       className="flex flex-wrap justify-center items-center gap-1 md:gap-2"
       aria-label="Pagination"
       onKeyDown={handlePaginationKeyDown}
+      onFocus={() => markKeyboardNavigation()}
     >
       <button
         type="button"

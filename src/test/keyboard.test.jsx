@@ -161,13 +161,12 @@ describe("handleMoviesKeyDown", () => {
     expect(document.activeElement).toBe(card8);
   });
 
-  it("ArrowDown from last row wraps (10 cards)", () => {
+  it("ArrowDown from last row focuses pagination or keeps focus when no pagination", () => {
     render(<Grid count={10} />);
     const card8 = screen.getByTestId("card-8");
-    const card2 = screen.getByTestId("card-2");
     card8.focus();
     fireEvent.keyDown(card8, { key: "ArrowDown" });
-    expect(document.activeElement).toBe(card2);
+    expect(document.activeElement).toBe(card8);
   });
 
   it("ArrowUp from first row moves to tabs or keeps focus when no tabs", () => {

@@ -20,7 +20,7 @@ function ShortcutRow({ keys, label }) {
 
 export default function KeyboardShortcutsTooltip() {
   return (
-    <div className="relative group">
+    <div className="relative group hidden md:block">
       <span
         className="inline-block text-white/70 group-hover:text-white p-1.5 rounded-2xl border border-white/30 group-hover:border-white/50 text-sm font-mono min-w-8 text-center cursor-default"
         aria-label="Keyboard shortcuts"

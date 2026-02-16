@@ -32,6 +32,10 @@ export default function Search() {
   useEffect(() => {
     const query = debouncedQuery.trim();
 
+    if (query.length < 2) {
+      return;
+    }
+
     if (!query) {
       setMoviesList([]);
       setActiveIndex(-1);

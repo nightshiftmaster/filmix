@@ -1,43 +1,57 @@
 import { useEffect } from "react";
 
+const isInputFocused = () => {
+  const tag = document.activeElement?.tagName;
+  return tag === "INPUT" || tag === "TEXTAREA";
+};
+
 export function useHomePageKeyboard() {
   useEffect(() => {
     const handleKeyDown = (e) => {
+      const key = e.key.toLowerCase();
       const searchEl = document.querySelector("[data-section='search']");
       const firstTab = document.querySelector(
         "[data-section='filter-tabs'] button",
       );
-      const inInput =
-        document.activeElement?.tagName === "INPUT" ||
-        document.activeElement?.tagName === "TEXTAREA";
 
-      if (e.key === "/") {
-        if (document.activeElement !== searchEl) {
+      switch (e.key) {
+        case "/":
+          if (document.activeElement !== searchEl) {
+            e.preventDefault();
+            searchEl?.focus();
+          }
+          return;
+        case "Escape":
           e.preventDefault();
-          searchEl?.focus();
-        }
-        return;
+          return;
+        default:
+          break;
       }
-      if (e.key.toLowerCase() === "m" && !inInput) {
-        e.preventDefault();
-        firstTab?.focus();
-      }
-      if (e.key.toLowerCase() === "f" && !inInput) {
-        e.preventDefault();
-        document.querySelector("[data-movie-card]")?.focus();
-      }
-      if (e.key.toLowerCase() === "p" && !inInput) {
-        const pagination = document.querySelector("[data-section='pagination']");
-        const currentPageBtn = pagination?.querySelector("[aria-current='page']");
-        const firstBtn = pagination?.querySelector("button");
-        const target = currentPageBtn || firstBtn;
-        if (target) {
+
+      if (isInputFocused()) return;
+
+      switch (key) {
+        case "m":
           e.preventDefault();
-          target.focus();
+          firstTab?.focus();
+          break;
+        case "f":
+          e.preventDefault();
+          document.querySelector("[data-movie-card]")?.focus();
+          break;
+        case "p": {
+          const pagination = document.querySelector(
+            "[data-section='pagination']",
+          );
+          const target =
+            pagination?.querySelector("[aria-current='page']") ||
+            pagination?.querySelector("button");
+          if (target) {
+            e.preventDefault();
+            target.focus();
+          }
+          break;
         }
-      }
-      if (e.key === "Escape") {
-        e.preventDefault();
       }
     };
     window.addEventListener("keydown", handleKeyDown, true);
@@ -48,22 +62,26 @@ export function useHomePageKeyboard() {
 export function useMoviePageKeyboard(navigate) {
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        navigate("/");
-        return;
+      switch (e.key) {
+        case "Escape":
+          e.preventDefault();
+          navigate("/");
+          return;
+        default:
+          break;
       }
-      const inInput =
-        document.activeElement?.tagName === "INPUT" ||
-        document.activeElement?.tagName === "TEXTAREA";
-      if (inInput) return;
-      if (e.key.toLowerCase() === "b") {
-        e.preventDefault();
-        document.querySelector("[data-section='back-home']")?.focus();
-      }
-      if (e.key.toLowerCase() === "f") {
-        e.preventDefault();
-        document.querySelector("[data-section='add-favorites']")?.focus();
+
+      if (isInputFocused()) return;
+
+      switch (e.key.toLowerCase()) {
+        case "b":
+          e.preventDefault();
+          document.querySelector("[data-section='back-home']")?.focus();
+          break;
+        case "f":
+          e.preventDefault();
+          document.querySelector("[data-section='add-favorites']")?.focus();
+          break;
       }
     };
     window.addEventListener("keydown", handleKeyDown, true);
