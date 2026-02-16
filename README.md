@@ -17,6 +17,15 @@ Movie app that lists movies from TMDB, supports search, favorites (stored in Red
 - **Motion**
 - **Vitest + Testing Library**
 
+## Keyboard navigation
+
+- `/` search
+- `m` categories, `f` films , `p` pagination
+- `Arrow` keys move focus/navigation
+- `Enter` open/select
+- `Esc` close/go back
+- `Tab` disabled
+
 Movies data comes from [TMDB](https://www.themoviedb.org/). Create a `.env` file and add your API token: `VITE_API_ACCESS_TOKEN=your_bearer_token`.
 
 ## Run
