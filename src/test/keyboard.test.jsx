@@ -50,11 +50,7 @@ describe("handleTabsKeyDown", () => {
 describe("handleMoviesKeyDown", () => {
   function Grid({ count = 8 }) {
     return (
-      <div
-        onKeyDown={handleMoviesKeyDown}
-        tabIndex={-1}
-        data-testid="grid"
-      >
+      <div onKeyDown={handleMoviesKeyDown} tabIndex={-1} data-testid="grid">
         {Array.from({ length: count }, (_, i) => (
           <div key={i} data-movie-card tabIndex={0} data-testid={`card-${i}`}>
             Card {i}

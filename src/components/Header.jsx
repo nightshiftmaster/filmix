@@ -6,9 +6,10 @@ import { motion } from "motion/react";
 import { fadeIn } from "../motion/variants";
 
 export default function Header() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const scrollToTop = () =>
+    document
+      .getElementById("app-scroll-container")
+      ?.scrollTo({ top: 0, behavior: "smooth" });
   return (
     <motion.header
       className="fixed flex md:flex-row flex-col gap-7 md:gap-0 items-center top-0 left-0 md:right-[7vw] right-0 z-50 py-5 px-8 md:px-12 drop-shadow-md bg-black/40"

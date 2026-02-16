@@ -15,6 +15,7 @@ function App() {
     <div className="flex flex-col h-screen">
       <Header />
       <main
+        id="app-scroll-container"
         ref={mainRef}
         className="flex-1 min-h-0 overflow-auto pt-30 md:pt-24"
       >
