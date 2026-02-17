@@ -19,13 +19,20 @@ Movie app that lists movies from TMDB, supports search, favorites (stored in Red
 
 ## Keyboard navigation
 
-- `/` search
-- `m` categories, `f` films , `p` pagination
-- `Arrow` keys move focus/navigation
-- `Enter` open/select
-- `Esc` close/go back
+The application is fully navigable using the keyboard.
 
-Movies data comes from [TMDB](https://www.themoviedb.org/). Create a `.env` file and add your API token: `VITE_API_ACCESS_TOKEN=your_bearer_token`.
+### Home
+- `/` — Focus search
+- `M` — Open menu
+- `F` — Focus movies grid
+- `P` — Focus pagination
+- `Arrow keys` — Navigate between items
+- `Enter` — Confirm selection
+
+### Movie page
+- `B` — Back to home
+- `F` — Add to favorites
+- `Esc` — Back to home
 
 ## Run
 
@@ -35,3 +42,5 @@ npm run dev
 ```
 
 Tests: `npm run test`
+
+Movies data comes from [TMDB](https://www.themoviedb.org/). Create a `.env` file and add your API token: `VITE_API_ACCESS_TOKEN=your_bearer_token`.
