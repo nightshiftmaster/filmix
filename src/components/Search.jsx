@@ -90,7 +90,7 @@ export default function Search() {
           type="text"
           placeholder="Search for a movie"
           data-section="search"
-          className="w-full p-2 px-10 text-white text-lg rounded-full bg-gray-600 outline-none focus:bg-white focus:text-gray-700"
+          className="w-full p-2 px-10 text-white text-lg rounded-full bg-gray-600 outline-none focus:bg-white focus:text-gray-700 focus:outline-2 focus:outline-cyan-300 focus:ring-4 focus:ring-cyan-300/40 focus:animate-[tabsFocusPulse_1.2s_ease-in-out_infinite]"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) => {

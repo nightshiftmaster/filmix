@@ -32,3 +32,17 @@ body {
   min-height: 100vh;
   overflow: hidden;
 }
+
+@keyframes tabsFocusPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(103, 232, 249, 0.25),
+      0 0 8px rgba(34, 211, 238, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px rgba(103, 232, 249, 0.95),
+      0 0 30px rgba(34, 211, 238, 0.95);
+  }
+}

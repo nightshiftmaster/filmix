@@ -10,24 +10,30 @@ const TABS = [
 export default function FilterTabs({ activeTab, onTabChange }) {
   const currentIndex = TABS.findIndex((tab) => tab.id === activeTab);
   const timerRef = useRef(null);
+  const tabRef = useRef(null);
 
   const clear = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = null;
   };
 
+  useEffect(() => {
+    tabRef.current?.focus();
+  }, []);
+
   useEffect(() => () => clear(), []);
 
   return (
     <div className="flex justify-center items-center">
       <div
-        className="flex gap-0 border-b border-gray-700 justify-center items-center w-[85%]"
+        className="flex gap-0 border-b border-gray-700 justify-center items-center w-fit rounded-t-lg focus-within:outline-2 focus-within:outline-cyan-300 focus-within:animate-[tabsFocusPulse_1.2s_ease-in-out_infinite]"
         data-section="filter-tabs"
       >
         {TABS.map((tab) => (
           <button
             key={tab.id}
             type="button"
+            ref={tab.id === activeTab ? tabRef : null}
             onClick={() => {
               clear();
               onTabChange(tab.id);
