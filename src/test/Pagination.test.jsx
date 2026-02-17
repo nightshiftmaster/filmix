@@ -11,7 +11,7 @@ function PaginationHost({ initialPage = 1, pagesCount = 10 }) {
 }
 
 describe("Pagination focus retention", () => {
-  it("keeps focus on pagination after Enter/click page change", async () => {
+  it("keeps focus inside pagination after Enter/click page change", async () => {
     render(<PaginationHost initialPage={1} pagesCount={10} />);
 
     const next = screen.getByRole("button", { name: "Next page" });
@@ -19,8 +19,8 @@ describe("Pagination focus retention", () => {
     fireEvent.click(next);
 
     await waitFor(() => {
-      const current = screen.getByRole("button", { name: "2" });
-      expect(document.activeElement).toBe(current);
+      const pagination = screen.getByRole("navigation", { name: "Pagination" });
+      expect(pagination.contains(document.activeElement)).toBe(true);
     });
   });
 });

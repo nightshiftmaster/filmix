@@ -6,7 +6,7 @@ export default function BackHomeButton() {
     <Link
       to="/"
       data-section="back-home"
-      className="inline-block text-white bg-white/10 hover:bg-white/20 mb-6 border w-fit mx-auto border-white/10 px-6 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50"
+      className="inline-block text-white bg-white/10 hover:bg-white/20 mb-6 border w-fit mx-auto border-white/10 px-6 py-3 rounded-lg focus-within:outline-2 focus-within:outline-cyan-300 focus-within:animate-[tabsFocusPulse_1.2s_ease-in-out_infinite]"
     >
       ← Back to home
     </Link>

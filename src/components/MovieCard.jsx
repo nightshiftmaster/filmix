@@ -7,11 +7,6 @@ export default function MovieCard({ movie }) {
     <Link
       to={`/movie/${movie.id}`}
       data-movie-card
-      onMouseEnter={(e) => {
-        if (document.activeElement?.closest("[data-section='pagination']"))
-          return;
-        if (!isRecentKeyboardNavigation()) e.currentTarget.focus();
-      }}
       onMouseLeave={(e) => e.currentTarget.blur()}
       className="shrink-0 w-[calc((100%-3*0.25rem)/1.1)]  mb-20 focus-within:outline-2 focus-within:outline-cyan-300 focus-within:animate-[tabsFocusPulse_1.4s_ease-in-out_infinite] rounded-xl overflow-hidden bg-neutral-800 block  transition-transform duration-300 origin-center"
     >

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMovieDetails } from "../store/movies/actions";
@@ -15,6 +15,7 @@ export default function MoviePage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector(selectDetailsData);
+  const favBtnRef = useRef(null);
 
   useEffect(() => {
     if (id) dispatch(fetchMovieDetails(Number(id)));
