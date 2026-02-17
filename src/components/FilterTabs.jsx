@@ -30,10 +30,10 @@ export default function FilterTabs({ activeTab, onTabChange }) {
     relatedTarget && !tabsRef.current?.contains(relatedTarget);
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center mb-10">
       <div
         ref={tabsRef}
-        className="flex gap-0 border-b border-gray-700 justify-center items-center w-fit rounded-t-lg focus-within:outline-2 focus-within:outline-cyan-300 focus-within:animate-[tabsFocusPulse_1.2s_ease-in-out_infinite]"
+        className="flex gap-0 border-b border-gray-700 justify-center items-center w-[70%] md:w-[60%] lg:w-[43%] xl:w-[35%] rounded-t-lg focus-within:outline-2 focus-within:outline-cyan-300 focus-within:animate-[tabsFocusPulse_1.2s_ease-in-out_infinite]"
         data-section="filter-tabs"
         onFocusCapture={() =>
           tabsRef.current?.scrollIntoView?.({
@@ -48,6 +48,7 @@ export default function FilterTabs({ activeTab, onTabChange }) {
             key={tab.id}
             type="button"
             ref={tab.id === activeTab ? tabRef : null}
+            style={{ width: `calc(100% / 3)` }}
             aria-current={activeTab === tab.id ? "true" : undefined}
             onClick={() => {
               clear();
@@ -75,8 +76,8 @@ export default function FilterTabs({ activeTab, onTabChange }) {
               })
             }
             className={`
-                 outline-none focus:outline-none focus-visible:outline-none
-              md:px-6 px-2 md:py-3 py-2 font-medium rounded-t-lg border border-gray-600 text-xs md:text-base border-b-0
+                 outline-none focus:outline-none focus-visible:outline-none 
+              text-center px-2 md:px-4 lg:px-6 py-2 md:py-3 font-medium rounded-t-lg border border-gray-600 whitespace-nowrap text-[11px] sm:text-xs md:text-base border-b-0
               transition-colors
               ${
                 activeTab === tab.id
