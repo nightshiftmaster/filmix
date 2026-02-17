@@ -3,6 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import {
   handleTabsKeyDown,
+  handleFilterTabsKeyDown,
   handleMoviesKeyDown,
   handlePaginationKeyDown,
 } from "../utils/keyboard";
@@ -44,6 +45,32 @@ describe("handleTabsKeyDown", () => {
     handleTabsKeyDown(e, onTabChange, TABS.length - 1, TABS);
     expect(e.preventDefault).toHaveBeenCalled();
     expect(onTabChange).not.toHaveBeenCalled();
+  });
+});
+
+describe("handleFilterTabsKeyDown", () => {
+  it("moves focus to search from Airing Now on ArrowUp", () => {
+    render(
+      <>
+        <input data-section="search" data-testid="search" />
+        <div data-section="filter-tabs">
+          <button type="button">Popular</button>
+          <button type="button">Airing Now</button>
+          <button type="button">My Favorites</button>
+        </div>
+      </>,
+    );
+
+    const e = { key: "ArrowUp", preventDefault: vi.fn() };
+    handleFilterTabsKeyDown(e, {
+      currentIndex: 1,
+      onTabChange: vi.fn(),
+      TABS,
+      clear: vi.fn(),
+    });
+
+    expect(e.preventDefault).toHaveBeenCalled();
+    expect(document.activeElement).toBe(screen.getByTestId("search"));
   });
 });
 
@@ -182,6 +209,30 @@ describe("handleMoviesKeyDown", () => {
     card8.focus();
     fireEvent.keyDown(card8, { key: "ArrowDown" });
     expect(document.activeElement).toBe(pageBtn);
+  });
+
+  it("ArrowDown skips disabled pagination buttons", () => {
+    render(
+      <>
+        <Grid count={10} />
+        <nav data-section="pagination">
+          <button type="button" data-testid="prev-disabled" disabled>
+            Prev
+          </button>
+          <button type="button" data-testid="current-page" aria-current="page">
+            1
+          </button>
+          <button type="button" data-testid="next-page">
+            Next
+          </button>
+        </nav>
+      </>,
+    );
+    const card8 = screen.getByTestId("card-8");
+    const currentPage = screen.getByTestId("current-page");
+    card8.focus();
+    fireEvent.keyDown(card8, { key: "ArrowDown" });
+    expect(document.activeElement).toBe(currentPage);
   });
 
   it("ArrowUp from first row moves to tabs or keeps focus when no tabs", () => {

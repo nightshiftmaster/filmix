@@ -52,10 +52,8 @@ export const handleFilterTabsKeyDown = (
 ) => {
   switch (e.key) {
     case "ArrowUp":
-      if (currentIndex === 0) {
-        e.preventDefault();
-        document.querySelector("[data-section='search']")?.focus();
-      }
+      e.preventDefault();
+      document.querySelector("[data-section='search']")?.focus();
       return;
     case "ArrowDown":
       e.preventDefault();
@@ -143,7 +141,11 @@ export const handleMoviesKeyDown = (e) => {
     case "ArrowDown":
       if (currentIndex + GRID_COLUMNS >= cards.length) {
         e.preventDefault();
-        document.querySelector("[data-section='pagination'] button")?.focus();
+        const pagination = document.querySelector("[data-section='pagination']");
+        const target =
+          pagination?.querySelector("[aria-current='page']") ||
+          pagination?.querySelector("button:not(:disabled)");
+        target?.focus();
       } else {
         e.preventDefault();
         cards[currentIndex + GRID_STEP.ArrowDown]?.focus();
