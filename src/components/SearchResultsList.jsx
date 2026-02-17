@@ -37,9 +37,7 @@ export default function SearchResultsList({
               <Link
                 to={`/movie/${movie.id}`}
                 className={`flex gap-3 p-2 rounded-lg items-center ${
-                  index === activeIndex
-                    ? "bg-neutral-700"
-                    : "hover:bg-neutral-700"
+                  index === activeIndex ? "bg-neutral-700" : ""
                 }`}
                 onMouseEnter={() => setActiveIndex?.(index)}
               >
