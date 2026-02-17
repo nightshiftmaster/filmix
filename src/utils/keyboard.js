@@ -141,7 +141,9 @@ export const handleMoviesKeyDown = (e) => {
     case "ArrowDown":
       if (currentIndex + GRID_COLUMNS >= cards.length) {
         e.preventDefault();
-        const pagination = document.querySelector("[data-section='pagination']");
+        const pagination = document.querySelector(
+          "[data-section='pagination']",
+        );
         const target =
           pagination?.querySelector("[aria-current='page']") ||
           pagination?.querySelector("button:not(:disabled)");

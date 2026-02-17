@@ -10,9 +10,6 @@ export function usePageKeyboard({ navigate, page = "home" } = {}) {
     const handleKeyDown = (e) => {
       const key = e.key.toLowerCase();
       const searchEl = document.querySelector("[data-section='search']");
-      const firstTab = document.querySelector(
-        "[data-section='filter-tabs'] button",
-      );
 
       switch (e.key) {
         case "/":
@@ -29,85 +26,77 @@ export function usePageKeyboard({ navigate, page = "home" } = {}) {
           break;
       }
 
-      switch (page) {
-        case "movie":
-          {
-            const favoritesBtn = document.querySelector(
-              "[data-section='add-favorites']",
-            );
-            const backHomeBtn = document.querySelector(
-              "[data-section='back-home']",
-            );
+      if (page === "movie") {
+        const favoritesBtn = document.querySelector(
+          "[data-section='add-favorites']",
+        );
+        const backHomeBtn = document.querySelector(
+          "[data-section='back-home']",
+        );
+        const activeEl = document.activeElement;
 
-            switch (key) {
-              case "arrowdown":
-                if (document.activeElement === searchEl) {
-                  e.preventDefault();
-                  favoritesBtn?.focus();
-                  return;
-                }
-                if (document.activeElement === favoritesBtn) {
-                  e.preventDefault();
-                  backHomeBtn?.focus();
-                  return;
-                }
-                break;
-              case "arrowup":
-                if (document.activeElement === backHomeBtn) {
-                  e.preventDefault();
-                  favoritesBtn?.focus();
-                  return;
-                }
-                if (document.activeElement === favoritesBtn) {
-                  e.preventDefault();
-                  searchEl?.focus();
-                  return;
-                }
-                break;
-              default:
-                break;
-            }
+        if (
+          (key === "arrowdown" || key === "arrowup") &&
+          activeEl === searchEl &&
+          document.querySelector("[data-section='search-results']")
+        ) {
+          return;
+        }
 
-            if (isInputFocused()) return;
-          }
-          switch (key) {
-            case "b":
-              e.preventDefault();
-              document.querySelector("[data-section='back-home']")?.focus();
-              break;
-            case "f":
-              e.preventDefault();
-              document.querySelector("[data-section='add-favorites']")?.focus();
-              break;
-          }
+        if (key === "arrowdown" && activeEl === searchEl) {
+          e.preventDefault();
+          favoritesBtn?.focus();
           return;
-        case "home":
-        default:
-          if (isInputFocused()) return;
-          switch (key) {
-            case "m":
-              e.preventDefault();
-              firstTab?.focus();
-              break;
-            case "f":
-              e.preventDefault();
-              document.querySelector("[data-movie-card]")?.focus();
-              break;
-            case "p": {
-              const pagination = document.querySelector(
-                "[data-section='pagination']",
-              );
-              const target =
-                pagination?.querySelector("[aria-current='page']") ||
-                pagination?.querySelector("button");
-              if (target) {
-                e.preventDefault();
-                target.focus();
-              }
-              break;
-            }
-          }
+        }
+        if (key === "arrowdown" && activeEl === favoritesBtn) {
+          e.preventDefault();
+          backHomeBtn?.focus();
           return;
+        }
+        if (key === "arrowup" && activeEl === backHomeBtn) {
+          e.preventDefault();
+          favoritesBtn?.focus();
+          return;
+        }
+        if (key === "arrowup" && activeEl === favoritesBtn) {
+          e.preventDefault();
+          searchEl?.focus();
+          return;
+        }
+
+        if (isInputFocused()) return;
+        if (key === "b") {
+          e.preventDefault();
+          backHomeBtn?.focus();
+        } else if (key === "f") {
+          e.preventDefault();
+          favoritesBtn?.focus();
+        }
+        return;
+      }
+
+      if (isInputFocused()) return;
+
+      const firstTab = document.querySelector(
+        "[data-section='filter-tabs'] button",
+      );
+      if (key === "m") {
+        e.preventDefault();
+        firstTab?.focus();
+      } else if (key === "f") {
+        e.preventDefault();
+        document.querySelector("[data-movie-card]")?.focus();
+      } else if (key === "p") {
+        const pagination = document.querySelector(
+          "[data-section='pagination']",
+        );
+        const target =
+          pagination?.querySelector("[aria-current='page']") ||
+          pagination?.querySelector("button");
+        if (target) {
+          e.preventDefault();
+          target.focus();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown, true);

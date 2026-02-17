@@ -35,6 +35,13 @@ export default function FilterTabs({ activeTab, onTabChange }) {
         ref={tabsRef}
         className="flex gap-0 border-b border-gray-700 justify-center items-center w-fit rounded-t-lg focus-within:outline-2 focus-within:outline-cyan-300 focus-within:animate-[tabsFocusPulse_1.2s_ease-in-out_infinite]"
         data-section="filter-tabs"
+        onFocusCapture={() =>
+          tabsRef.current?.scrollIntoView?.({
+            block: "center",
+            inline: "nearest",
+            behavior: "smooth",
+          })
+        }
       >
         {TABS.map((tab) => (
           <button
