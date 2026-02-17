@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from "react";
+import React, { memo, useEffect, useMemo, useRef } from "react";
 import {
   handlePaginationKeyDown,
   markKeyboardNavigation,
@@ -6,27 +6,46 @@ import {
 
 function Pagination({ currentPage, setCurrentPage, pagesCount }) {
   const PAGES_PER_BLOCK = 5;
-  if (!pagesCount || pagesCount <= 1) return null;
+  const navRef = useRef(null);
+  const shouldRestoreFocusRef = useRef(false);
+  const safePagesCount = pagesCount ?? 0;
 
   const { visiblePages, endPage } = useMemo(() => {
     const startPage =
       Math.floor((currentPage - 1) / PAGES_PER_BLOCK) * PAGES_PER_BLOCK + 1;
-    const endPage = Math.min(startPage + PAGES_PER_BLOCK - 1, pagesCount);
+    const endPage = Math.min(startPage + PAGES_PER_BLOCK - 1, safePagesCount);
 
     const visiblePages = Array.from(
-      { length: endPage - startPage + 1 },
+      { length: Math.max(0, endPage - startPage + 1) },
       (_, i) => startPage + i,
     );
     return { visiblePages, endPage };
-  }, [currentPage, pagesCount]);
+  }, [currentPage, safePagesCount]);
 
   const goTo = (page) => {
-    const next = Math.max(1, Math.min(pagesCount, page));
+    const next = Math.max(1, Math.min(safePagesCount, page));
     if (next !== currentPage) setCurrentPage(next);
   };
 
+  useEffect(() => {
+    if (!shouldRestoreFocusRef.current) return;
+    shouldRestoreFocusRef.current = false;
+    const target =
+      navRef.current?.querySelector("[aria-current='page']") ||
+      navRef.current?.querySelector("button:not(:disabled)");
+    target?.focus();
+  }, [currentPage]);
+
+  const goToWithFocusRestore = (page) => {
+    shouldRestoreFocusRef.current = true;
+    goTo(page);
+  };
+
+  if (safePagesCount <= 1) return null;
+
   return (
     <nav
+      ref={navRef}
       data-section="pagination"
       className="flex flex-wrap justify-center items-center gap-1 md:gap-2"
       aria-label="Pagination"
@@ -37,7 +56,7 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
         type="button"
         className="font-bold rounded-md border border-gray-800 disabled:opacity-50 hover:bg-gray-500 px-2 py-1.5 md:px-4 md:py-2 text-sm md:text-base text-white"
         disabled={currentPage === 1}
-        onClick={() => goTo(currentPage - 1)}
+        onClick={() => goToWithFocusRestore(currentPage - 1)}
         aria-label="Previous page"
       >
         <span className="hidden sm:inline">Previous</span>
@@ -53,7 +72,7 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
               ? "bg-white text-black"
               : "bg-gray-800 text-white"
           }`}
-          onClick={() => goTo(page)}
+          onClick={() => goToWithFocusRestore(page)}
           aria-current={page === currentPage ? "page" : undefined}
         >
           {page}
@@ -72,8 +91,8 @@ function Pagination({ currentPage, setCurrentPage, pagesCount }) {
       <button
         type="button"
         className="font-bold rounded-md border border-gray-800 disabled:opacity-50 hover:bg-gray-500 px-2 py-1.5 md:px-4 md:py-2 text-sm md:text-base text-white"
-        disabled={currentPage === pagesCount}
-        onClick={() => goTo(currentPage + 1)}
+        disabled={currentPage === safePagesCount}
+        onClick={() => goToWithFocusRestore(currentPage + 1)}
         aria-label="Next page"
       >
         Next

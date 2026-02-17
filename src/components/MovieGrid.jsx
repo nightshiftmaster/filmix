@@ -95,7 +95,7 @@ export default function MovieGrid({
                   )}
           </div>
         </div>
-        {!loading && !isFavorites && (
+        {!isFavorites && (
           <Pagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
