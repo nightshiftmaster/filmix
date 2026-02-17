@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { isRecentKeyboardNavigation } from "../utils/keyboard";
 
 export default function MovieCard({ movie }) {
   return (

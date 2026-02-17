@@ -11,10 +11,14 @@ import Pagination from "./Pagination";
 import { motion } from "motion/react";
 import { fadeIn } from "../motion/variants";
 
-export default function MovieGrid({
-  category = "Popular",
-  filterId = "popular",
-}) {
+export default function MovieGrid({ filterId = "popular" }) {
+  const categoryLabel =
+    filterId === "popular"
+      ? "Popular"
+      : filterId === "now_playing"
+        ? "Airing Now"
+        : "My Favorites";
+
   const dispatch = useDispatch();
   const { movies, loading, error, totalPages } = useSelector(
     (state) => selectListState(state, filterId),
@@ -52,7 +56,7 @@ export default function MovieGrid({
         viewport={{ once: false, amount: 0 }}
       >
         <h2 className="md:text-4xl text-2xl md:text-left text-center font-bold text-white mb-4">
-          {category}
+          {categoryLabel}
         </h2>
         <div className="relative">
           <ScrollButtons
